@@ -1,0 +1,52 @@
+spring:
+    application: 
+        name: ins-cola
+    aop: 
+        auto: true
+    # 开发环境
+#    datasource:
+#        url: jdbc:mysql://localhost:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnect=true
+#        username: root
+#        password: dinqin..
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+    # 生产环境
+    datasource:
+        url: jdbc:mysql://122.51.15.106:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnect=true
+        username: root
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    redis:
+        host: 122.51.15.106
+        password: 123456
+        port: 6379	
+        database: 1
+        pool:
+            max-active: 8
+            max-wait: -1
+            max-idle: 300
+            min-idle: 0
+        timeout: 10000
+# 开发环境
+#server:
+#    port: 8888
+# 生产环境
+server:
+    port: 80
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: cont=countSql
+    page-size-zero: true
+# 小程序配置
+wx:
+    qe:
+        appid: wx5b484b45745a47d3
+        appsecret: 699c9d167705475a59c2ec338467e03e
+        modelId: 9_BkwwFE-R8D0ymqVFRXezkXb5EFO4pitu3ZqJC7r-0
+logging:
+    level:
+        com:
+            baoyun:
+                ins:
+                    mapper: DEBUG
