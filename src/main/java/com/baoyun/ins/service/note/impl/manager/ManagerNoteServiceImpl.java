@@ -11,12 +11,14 @@ import com.baoyun.ins.entity.note.dto.ManagerNoteQueryDto;
 import com.baoyun.ins.entity.note.dto.NoteCommentDto;
 import com.baoyun.ins.entity.note.dto.NoteDetailDto;
 import com.baoyun.ins.entity.note.vo.ManagerNoteQueryVo;
+import com.baoyun.ins.entity.note.vo.NoteApproveVo;
 import com.baoyun.ins.entity.note.vo.NoteCommentQueryVo;
 import com.baoyun.ins.mapper.note.CommentMapper;
 import com.baoyun.ins.mapper.note.manager.ManagerNoteManager;
 import com.baoyun.ins.service.note.manager.ManagerNoteService;
 import com.baoyun.ins.utils.json.Msg;
 import com.baoyun.ins.utils.pagehelper.Page;
+import com.baoyun.ins.utils.spring.SpringContextUtil;
 import com.baoyun.ins.utils.string.StringUtil;
 import com.github.pagehelper.PageHelper;
 
@@ -54,7 +56,7 @@ public class ManagerNoteServiceImpl implements ManagerNoteService {
 	 *彻底删除帖子
 	 */
 	@Override
-	public Msg<?> delete(long id) {
+	public Msg<?> delete(Long id) {
 		// TODO Auto-generated method stub
 		noteMapper.deleteComplete(id);
 		return new Msg<>();
@@ -64,7 +66,7 @@ public class ManagerNoteServiceImpl implements ManagerNoteService {
 	 *帖子详情
 	 */
 	@Override
-	public Msg<?> get(long id) {
+	public Msg<?> get(Long id) {
 		// TODO Auto-generated method stub
 		NoteDetailDto ndd = noteMapper.get(id);
 		if (ndd != null) {
@@ -104,6 +106,20 @@ public class ManagerNoteServiceImpl implements ManagerNoteService {
 			ndd.setCommentList(parentList);
 		}
 		return new Msg<>(ndd);
+	}
+
+	/**
+	 *帖子内容审核
+	 */
+	@Override
+	public Msg<?> approve(NoteApproveVo noteApproveVo) {
+		// TODO Auto-generated method stub
+		noteApproveVo.setApprover(SpringContextUtil.getUserId());
+		// 审核
+		noteMapper.approve(noteApproveVo);
+		// 修改审核状态
+		noteMapper.updateStatus(noteApproveVo.getNoteId(), noteApproveVo.getStatus());
+		return new Msg<>();
 	}
 
 }

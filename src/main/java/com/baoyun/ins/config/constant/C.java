@@ -37,8 +37,4 @@ public interface C {
 		String OBSOLETE = "2";//作废的
 	}
 	
-
-	
-	
-
 }

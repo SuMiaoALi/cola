@@ -120,4 +120,5 @@ public class NoteController {
 	public Msg<?> delete(@PathVariable Long id){
 		return noteService.delete(id);
 	}
+	
 }

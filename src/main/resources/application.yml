@@ -10,13 +10,20 @@ spring:
 #        password: dinqin..
 #        driver-class-name: com.mysql.cj.jdbc.Driver
     # 生产环境
+#    datasource:
+#        url: jdbc:mysql://122.51.15.106:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnect=true
+#        username: root
+#        password: 123456
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+    # docker环境
     datasource:
-        url: jdbc:mysql://122.51.15.106:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnect=true
+        url: jdbc:mysql://mysql:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&autoReconnect=true
         username: root
         password: 123456
         driver-class-name: com.mysql.cj.jdbc.Driver
     redis:
-        host: 122.51.15.106
+#        host: 122.51.15.106
+        host: redis
         password: 123456
         port: 6379	
         database: 1
@@ -27,11 +34,8 @@ spring:
             min-idle: 0
         timeout: 10000
 # 开发环境
-#server:
-#    port: 8888
-# 生产环境
 server:
-    port: 80
+    port: 8888
 pagehelper:
     helperDialect: mysql
     reasonable: true

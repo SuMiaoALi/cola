@@ -48,5 +48,10 @@ public class RedisConstant {
 	 */
 	public static final String BI_COUNT = "BI:QUE:COUNT";
 	
+	/**
+	 * 标签
+	 */
+	public static final String BI_TAGS = "BI:TAGS";
+	
 	
 }

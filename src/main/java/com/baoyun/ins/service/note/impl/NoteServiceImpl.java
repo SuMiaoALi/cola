@@ -54,7 +54,7 @@ public class NoteServiceImpl implements NoteService {
 	public Msg<?> save(NoteVo noteVo) {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<>();
-		noteVo.setIsDraft("1").setAuthor(SpringContextUtil.getUserId()).setCover(noteVo.getImages().get(0).getUrl()).setStatus("1");
+		noteVo.setIsDraft("1").setAuthor(SpringContextUtil.getUserId()).setCover(noteVo.getImages().get(0).getUrl()).setStatus("0");
 		// 传0为发布帖子
 		if(noteVo.getId() == 0) {
 			noteMapper.save(noteVo);

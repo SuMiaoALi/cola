@@ -3,12 +3,15 @@ package com.baoyun.ins.mapper.note.manager;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.baoyun.ins.entity.note.dto.ManagerNoteQueryDto;
 import com.baoyun.ins.entity.note.dto.NoteDetailDto;
 import com.baoyun.ins.entity.note.vo.ManagerNoteQueryVo;
+import com.baoyun.ins.entity.note.vo.NoteApproveVo;
 
 public interface ManagerNoteManager {
 
@@ -140,6 +143,25 @@ public interface ManagerNoteManager {
 	 */
 	@Select("select group_concat(url) from t_note_media where note_id = #{id} and status = 0 ")
 	String getImg(long id);
+
+	/**
+	 * @Description: 帖子内容审核
+	 * @Author cola
+	 * @Data: 2020年1月12日
+	 * @param noteApproveVo
+	 */
+	@Insert("insert into t_note_approve(note_id, approver, reason, time) values (#{noteId}, #{approver}, #{reason}, unix_timestamp(now())) ")
+	void approve(NoteApproveVo noteApproveVo);
+	
+	/**
+	 * @Description: 修改审核状态
+	 * @Author cola
+	 * @Data: 2020年1月12日
+	 * @param noteId
+	 * @param status
+	 */
+	@Update("update t_note set status = #{1} where id = #{noteId} ")
+	void updateStatus(Long noteId, Integer status);
 	
 	
 }

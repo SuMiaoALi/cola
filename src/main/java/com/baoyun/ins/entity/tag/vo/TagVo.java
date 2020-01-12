@@ -1,37 +1,38 @@
-package com.baoyun.ins.entity.bi.dto;
+package com.baoyun.ins.entity.tag.vo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
- * @Description: 标签实体
+ * @Description: 后台标签管理保存实体
  * @Author cola
  * @Date 2020年1月12日
  */
 
-@ApiModel("标签实体")
+@ApiModel("后台标签管理保存实体")
 @Data
-public class TagDto implements Serializable {/**
+@Accessors(chain = true)
+public class TagVo implements Serializable {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@ApiModelProperty("id")
+	@ApiModelProperty(value = "id", hidden = true)
 	private Integer id;
 	
-	@ApiModelProperty("标签")
+	@ApiModelProperty("标签名")
 	private String tag;
-
-	@ApiModelProperty("父节点")
+	
+	@ApiModelProperty("父id")
 	private Integer parentId;
 	
 	@ApiModelProperty("权重")
 	private Integer weight;
-	
-	@ApiModelProperty("二级标签")
-	private List<TagDto> children;
+
 }

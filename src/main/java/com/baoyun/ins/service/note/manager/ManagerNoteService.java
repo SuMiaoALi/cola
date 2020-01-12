@@ -1,6 +1,7 @@
 package com.baoyun.ins.service.note.manager;
 
 import com.baoyun.ins.entity.note.vo.ManagerNoteQueryVo;
+import com.baoyun.ins.entity.note.vo.NoteApproveVo;
 import com.baoyun.ins.utils.json.Msg;
 
 public interface ManagerNoteService {
@@ -21,7 +22,7 @@ public interface ManagerNoteService {
 	 * @param id
 	 * @return
 	 */
-	Msg<?> delete(long id);
+	Msg<?> delete(Long id);
 
 	/**
 	 * @Description: 查询笔记详情
@@ -30,6 +31,15 @@ public interface ManagerNoteService {
 	 * @param id
 	 * @return
 	 */
-	Msg<?> get(long id);
+	Msg<?> get(Long id);
+
+	/**
+	 * @Description: 帖子审核
+	 * @Author cola
+	 * @Data: 2020年1月12日
+	 * @param noteApproveVo
+	 * @return
+	 */
+	Msg<?> approve(NoteApproveVo noteApproveVo);
 
 }
