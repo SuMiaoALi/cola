@@ -22,30 +22,30 @@ import io.swagger.annotations.ApiOperation;
  * @Date 2019年12月19日
  */
 
-@Api(tags = "问卷接口")
-@RestController
-@RequestMapping("/ques")
-public class QuesController {
-	
-	@Autowired
-	private QuesService quesService;
-	
-	@ApiOperation("保存问卷")
-	@PostMapping("/save")
-	public Msg<?> save(@RequestBody QuesVo stageVo) {
-		return quesService.save(stageVo);
-	}
-	
-	@ApiOperation("查询用户有没有问题")
-	@GetMapping("/hasQues")
-	public Msg<?> hasQuestion(BaseVo base) {
-		return quesService.hasQuestion(base);
-	}
-	
-	@ApiOperation("查询问题详情")
-	@GetMapping("/detail/{id}")
-	public Msg<?> datail(@PathVariable String id) {
-		return quesService.datail(id);
-	}
-
-}
+//@Api(tags = "问卷接口")
+//@RestController
+//@RequestMapping("/ques")
+//public class QuesController {
+//	
+//	@Autowired
+//	private QuesService quesService;
+//	
+//	@ApiOperation("保存问卷")
+//	@PostMapping("/save")
+//	public Msg<?> save(@RequestBody QuesVo stageVo) {
+//		return quesService.save(stageVo);
+//	}
+//	
+//	@ApiOperation("查询用户有没有问题")
+//	@GetMapping("/hasQues")
+//	public Msg<?> hasQuestion(BaseVo base) {
+//		return quesService.hasQuestion(base);
+//	}
+//	
+//	@ApiOperation("查询问题详情")
+//	@GetMapping("/detail/{id}")
+//	public Msg<?> datail(@PathVariable String id) {
+//		return quesService.datail(id);
+//	}
+//
+//}
