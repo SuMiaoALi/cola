@@ -114,7 +114,8 @@ public class ManagerNoteServiceImpl implements ManagerNoteService {
 	@Override
 	public Msg<?> approve(NoteApproveVo noteApproveVo) {
 		// TODO Auto-generated method stub
-		noteApproveVo.setApprover(SpringContextUtil.getUserId());
+//		noteApproveVo.setApprover(SpringContextUtil.getUserId());
+		noteApproveVo.setApprover("addcd2394d354ebfbd8da62145d25df7");
 		// 审核
 		noteMapper.approve(noteApproveVo);
 		// 修改审核状态

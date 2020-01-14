@@ -160,7 +160,7 @@ public interface ManagerNoteManager {
 	 * @param noteId
 	 * @param status
 	 */
-	@Update("update t_note set status = #{1} where id = #{noteId} ")
+	@Update("update t_note set status = #{1} where id = #{0} ")
 	void updateStatus(Long noteId, Integer status);
 	
 	

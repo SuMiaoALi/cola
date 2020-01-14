@@ -34,7 +34,4 @@ public class NoteApproveVo implements Serializable {
 	@ApiModelProperty("帖子审核状态")
 	private Integer status;
 	
-	@ApiModelProperty("标签")
-	private String tags;
-
 }

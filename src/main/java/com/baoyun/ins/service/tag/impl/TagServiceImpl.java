@@ -40,6 +40,7 @@ public class TagServiceImpl implements TagService {
 			return msg;
 		}
 		List<TagDto> list = tagMapper.list();
+		redisUtil.set(RedisConstant.BI_TAGS, list);
 		msg.setData(list);
 		return msg;
 	}
