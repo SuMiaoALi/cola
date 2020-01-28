@@ -40,32 +40,32 @@ public class CommentController {
 	@Autowired
 	private NoteService noteService;
 	
-	@ApiOperation(value="查询评论")
+	@ApiOperation("查询评论")
 	@GetMapping
 	public Msg<Page<NoteCommentDto>> list(NoteCommentQueryVo noteCommentQueryVo){
 		return commentService.list(noteCommentQueryVo);
 	}
 	
-	@ApiOperation(value="查询评论")
+	@ApiOperation("查询评论")
 	@GetMapping("/applies")
 	public Msg<Page<NoteCommentApplyDto>> applies(NoteCommentQueryVo noteCommentQueryVo){
 		return commentService.applies(noteCommentQueryVo);
 	}
 	
-	@ApiOperation(value="保存评论")
+	@ApiOperation("保存评论")
 	@PostMapping
-	@Notify(type="C",method="A")
+	@Notify(type = "C", method = "A")
 	public Msg<?> save(@Valid @RequestBody CommentVo commentVo){
 		return commentService.save(commentVo);
 	}
 	
-	@ApiOperation(value="点赞")
+	@ApiOperation("点赞")
 	@PutMapping("/like/{id}")
 	public Msg<?> like(@PathVariable long id){
 		return noteService.operate(id, 7);
 	}
 	
-	@ApiOperation(value="取消点赞")
+	@ApiOperation("取消点赞")
 	@PutMapping("/unlike/{id}")
 	public Msg<?> unlike(@PathVariable long id){
 		return noteService.operate(id, 8);

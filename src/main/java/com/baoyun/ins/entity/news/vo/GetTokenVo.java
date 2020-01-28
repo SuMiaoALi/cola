@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,6 +17,7 @@ import lombok.experimental.Accessors;
 @ApiModel("获取token入参实体")
 @Data
 @Accessors(chain = true)
+@AllArgsConstructor
 public class GetTokenVo implements Serializable {
 
 	/**

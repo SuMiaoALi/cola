@@ -34,7 +34,7 @@ public class ManagerTagController {
 	
 	@ApiOperation("获取标签列表")
 	@GetMapping("/baseTags")
-	public Msg<?> list(BaseVo base){
+	public Msg<?> list(BaseVo base) {
 		return tagService.list(base);
 	}
 	

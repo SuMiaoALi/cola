@@ -27,7 +27,7 @@ public class TagController {
 	
 	@ApiOperation("查询系统标签")
 	@GetMapping
-	public Msg<?> list(){
+	public Msg<?> list() {
 		return tagService.list();
 	}
 

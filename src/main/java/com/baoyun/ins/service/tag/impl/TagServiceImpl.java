@@ -35,40 +35,15 @@ public class TagServiceImpl implements TagService {
 	public Msg<?> list() {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<>();
-		if (redisUtil.exists(RedisConstant.BI_TAGS)) {
-			msg.setData(redisUtil.get("RedisConstant.BI_TAGS", List.class));
-			return msg;
-		}
+//		if (redisUtil.exists(RedisConstant.BI_TAGS)) {
+//			msg.setData(redisUtil.get("RedisConstant.BI_TAGS", List.class));
+//			return msg;
+//		}
 		List<TagDto> list = tagMapper.list();
-		redisUtil.set(RedisConstant.BI_TAGS, list);
+		// 分层
+//		redisUtil.set(RedisConstant.BI_TAGS, _list);
 		msg.setData(list);
 		return msg;
 	}
 	
-	/**
-	 * @Description: 子集数
-	 * @Author cola
-	 * @Data: 2020年1月12日
-	 * @param id
-	 * @param list
-	 * @return
-	 */
-	protected List<TagDto> tree(Integer id, List<TagDto> list) {
-		
-		List<TagDto> children = new ArrayList<>();
-		for (TagDto tag: list) {
-			if (tag.getParentId() == id) {
-				children.add(tag);
-				
-				if (tag.getChildren() == null) {
-					tag.setChildren(new ArrayList<>());
-				}
-				
-				List<TagDto> _children = this.tree(tag.getId(), list);
-				tag.setChildren(_children);
-			}
-		}
-		return children;
-	}
-
 }

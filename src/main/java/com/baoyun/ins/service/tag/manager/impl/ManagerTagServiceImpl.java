@@ -1,5 +1,6 @@
 package com.baoyun.ins.service.tag.manager.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ public class ManagerTagServiceImpl implements ManagerTagService {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(base.getStart(), base.getPageSize());
 		List<TagDto> list = tagMapper.list();
-		Page<TagDto> page = new Page<>(list);
+		List<TagDto> _list = this.tree(0, list);
+		Page<TagDto> page = new Page<>(_list);
 		return new Msg<>(page);
 	}
 
@@ -44,7 +46,8 @@ public class ManagerTagServiceImpl implements ManagerTagService {
 	@Override
 	public Msg<?> insert(TagVo tagVo) {
 		// TODO Auto-generated method stub
-		Integer id = tagMapper.insert(tagVo);
+		tagMapper.insert(tagVo);
+		Integer id = tagVo.getId();
 		return new Msg<>(id);
 	}
 
@@ -67,5 +70,31 @@ public class ManagerTagServiceImpl implements ManagerTagService {
 		tagMapper.update(tagVo);
 		return new Msg<>();
 	}
-
+	
+	/**
+	 * @Description: 子集
+	 * @Author cola
+	 * @Data: 2020年1月12日
+	 * @param id
+	 * @param list
+	 * @return
+	 */
+	protected List<TagDto> tree(Integer id, List<TagDto> list) {
+		
+		List<TagDto> children = new ArrayList<>();
+		for (TagDto tag: list) {
+			if (tag.getParentId() == id) {
+				children.add(tag);
+				
+				if (tag.getChildren() == null) {
+					tag.setChildren(new ArrayList<>());
+				}
+				
+				List<TagDto> _children = this.tree(tag.getId(), list);
+				tag.setChildren(_children);
+			}
+		}
+		return children;
+	}
+	
 }

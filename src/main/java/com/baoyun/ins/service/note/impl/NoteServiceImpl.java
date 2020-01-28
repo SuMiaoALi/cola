@@ -54,7 +54,9 @@ public class NoteServiceImpl implements NoteService {
 	public Msg<?> save(NoteVo noteVo) {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<>();
-		noteVo.setIsDraft("1").setAuthor(SpringContextUtil.getUserId()).setCover(noteVo.getImages().get(0).getUrl()).setStatus("0");
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		noteVo.setIsDraft("1").setAuthor(userId).setCover(noteVo.getImages().get(0).getUrl()).setStatus("0");
 		// 传0为发布帖子
 		if(noteVo.getId() == 0) {
 			noteMapper.save(noteVo);
@@ -107,7 +109,9 @@ public class NoteServiceImpl implements NoteService {
 	public Msg<?> operate(Long id, Integer type) {
 		// TODO Auto-generated method stub
 		Msg<?> msg = new Msg<>();
-		NoteOperateDto nod = noteMapper.operate(SpringContextUtil.getUserId(), id, type);
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		NoteOperateDto nod = noteMapper.operate(userId, id, type);
 		msg.setCode(nod.getRs());
 		return msg;
 	}
@@ -118,7 +122,8 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public Msg<NoteDetailDto> get(Long id) {
 		// TODO Auto-generated method stub
-		String userId = SpringContextUtil.getUserId();
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
 		NoteDetailDto ndd = noteMapper.get(id, userId);
 		// 图片，标签
 		ndd.setMedia(noteMapper.getImg(id));
@@ -149,7 +154,7 @@ public class NoteServiceImpl implements NoteService {
 		// 封装好评论（回复）
 		Page<NoteCommentDto> pageInfo = new Page<NoteCommentDto>(list, 1, 4);
 		ndd.setComments(pageInfo);
-		// 推荐
+		// 推荐帖
 		ndd.setRecommend(noteMapper.recommend(id, userId));
 		try {
 			noteMapper.operate(userId, id, 5);
@@ -167,7 +172,8 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public Msg<?> delete(Long id) {
 		// TODO Auto-generated method stub
-		String userId = SpringContextUtil.getUserId(); 
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
 		noteMapper.delete(userId, id);
 		return new Msg<>();
 	}

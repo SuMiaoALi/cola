@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,17 +63,20 @@ public class ManagerLoginServiceImpl implements ManagerLoginService {
 				}
 			}
 			log.info("登录成功");
+			
 			// 用户角色
 			List<Role> roles = userMapper.getRole(user.getId());
 			Set<String> scopes = new HashSet<>();
 			roles.stream().forEach(item -> scopes.add(item.getCode()));
+			
 			// 权限
 			List<Source> sources = userMapper.getPermission(user.getId());
 			Set<String> privileges = new HashSet<String>();
 			sources.stream().forEach(item -> privileges.add(item.getCode()));
+			
 			// token
 			String token = TokenUtil.createToken(user.getId(), scopes, privileges);
-			msg.setData(token);
+			msg.setData(new HashedMap().put("token", token));
 		} else {
 			// 用户不存在
 			msg.setCode(GlobalReturnCode.USER_NOT_EXIT);

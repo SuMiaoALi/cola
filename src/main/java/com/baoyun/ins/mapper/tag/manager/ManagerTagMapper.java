@@ -19,7 +19,7 @@ public interface ManagerTagMapper {
 	 * @Data: 2020年1月12日
 	 * @return
 	 */
-	@Select("select id, tag, parent_id, weight from t_bi_tag ")
+	@Select("select id, tag, parent_id parentId, weight from t_bi_tag order by weight desc ")
 	List<TagDto> list();
 
 	/**
@@ -31,7 +31,7 @@ public interface ManagerTagMapper {
 	 */
 	@Insert("insert into t_bi_tag(tag, parent_id, weight) values (#{tag}, #{parentId}, #{weight})")
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
-	Integer insert(TagVo tagVo);
+	void insert(TagVo tagVo);
 
 	/**
 	 * @Description: 删除标签

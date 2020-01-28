@@ -145,6 +145,7 @@ public class LoginServiceImpl implements LoginService {
 		} else {
 			sex = "1";
 		}
+		// 注册sso
 		ThirdBindVo bindVo = new ThirdBindVo();
 		bindVo.setOpenid(JSONObject.getString("openid")).setUnionid(JSONObject.getString("unionid") == null ? "" : JSONObject.getString("unionid"))
 			  .setAvatar(JSONObject.getString("avatarUrl")).setName(JSONObject.getString("nickName")).setSex(sex);

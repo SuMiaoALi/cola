@@ -30,10 +30,12 @@ public class AccessTokenUtil {
 		String accessToken = null;
 		String url = null;
 		// 微信
-		String client = tokenVo.getClient();
-		if ("WX".equals(client)) {
-			url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + wxqeAppid
-				  + "&secret=" + wxqeAppsecret;
+		if ("WX".equals(tokenVo.getClient())) {
+			// 学ta
+			if ("qeMini".equals(tokenVo.getType())) {
+				url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + wxqeAppid
+					+ "&secret=" + wxqeAppsecret;
+			}
 		} else {
 			log.info("参数错误！");
 		}
@@ -41,8 +43,10 @@ public class AccessTokenUtil {
 		try {
 			callback = HttpClientUtils.sendPost(url);
 			JSONObject json = JSONObject.parseObject(callback);
+			
 			if (json.getIntValue("errcode") == 0) {
 				accessToken = json.getString("access_token");
+				log.info("access_token：" + accessToken);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

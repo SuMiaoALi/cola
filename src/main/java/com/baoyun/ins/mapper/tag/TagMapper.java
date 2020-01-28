@@ -19,7 +19,7 @@ public interface TagMapper {
 	 * @Data: 2020年1月12日
 	 * @return
 	 */
-	@Select("select id, tag, parent_id, weight from t_bi_tag ")
+	@Select("select id, tag, parent_id parentId, weight from t_bi_tag ")
 	List<TagDto> list();
 
 	

@@ -24,7 +24,9 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 	@Override
 	public Msg<Page<KeywordDto>> list(KeywordQueryVo keywordVo) {
-		keywordVo.setCurrentUserId(SpringContextUtil.getUserId());
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		keywordVo.setCurrentUserId(userId);
 		PageHelper.startPage(keywordVo.getStart(), keywordVo.getPageSize());	
 		List<KeywordDto> list = keywordMapper.list(keywordVo.getCurrentUserId());
 		Page<KeywordDto> pageInfo = new Page<KeywordDto>(list,keywordVo.getStart(), keywordVo.getPageSize());
@@ -36,7 +38,9 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 	@Override
 	public Msg<?> delete(String keyword) {
-		 keywordMapper.delete(SpringContextUtil.getUserId(), keyword);
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		keywordMapper.delete(userId, keyword);
 		return new Msg<>();
 	}
 	
@@ -47,7 +51,7 @@ public class KeywordServiceImpl implements KeywordService {
 	public Msg<Page<KeywordDto>> allKeyword(KeywordQueryVo keywordVo) {
 		PageHelper.startPage(keywordVo.getStart(), keywordVo.getPageSize());	
 		List<KeywordDto> list = keywordMapper.allKeyword(keywordVo); 
-		Page<KeywordDto> pageInfo = new Page<KeywordDto>(list,keywordVo.getStart(), keywordVo.getPageSize());
+		Page<KeywordDto> pageInfo = new Page<KeywordDto>(list, keywordVo.getStart(), keywordVo.getPageSize());
 		return new Msg<Page<KeywordDto>>(pageInfo);
 	}
 

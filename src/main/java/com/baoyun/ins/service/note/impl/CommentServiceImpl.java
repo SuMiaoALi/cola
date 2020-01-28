@@ -60,7 +60,9 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Msg<Page<NoteCommentApplyDto>> applies(NoteCommentQueryVo noteCommentQueryVo) {
 		// TODO Auto-generated method stub
-		noteCommentQueryVo.setUserId(SpringContextUtil.getUserId());
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		noteCommentQueryVo.setUserId(userId);
 		PageHelper.startPage(noteCommentQueryVo.getStart(), noteCommentQueryVo.getPageSize());
 		List<NoteCommentApplyDto> _list = commentMapper.apply(noteCommentQueryVo);
 		Page<NoteCommentApplyDto> _pageInfo = new Page<NoteCommentApplyDto>(_list,noteCommentQueryVo.getStart(), noteCommentQueryVo.getPageSize());
