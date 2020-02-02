@@ -43,7 +43,6 @@ public class NoteController {
 	@GetMapping
 	@CanTourist(true)
 	public Msg<Page<NoteQueryDto>> list(NoteQueryVo noteQueryVo){
-		noteQueryVo.setStatus("1");
 		return noteService.list(noteQueryVo);
 	}
 	

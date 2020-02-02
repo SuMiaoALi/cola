@@ -2,7 +2,9 @@ package com.baoyun.ins.service.auth;
 
 import javax.validation.Valid;
 
+import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.utils.json.Msg;
 
@@ -43,6 +45,24 @@ public interface LoginService {
 	 * @throws 
 	 */
 	Msg<Object> bindWxApp(@Valid BindVo bind);
+
+	/**
+	 * @Description: web注册
+	 * @Author cola
+	 * @Data: 2020年2月2日
+	 * @param signUp
+	 * @return
+	 */
+	Msg<?> webSignUp(SignUpVo signUp);
+
+	/**
+	 * @Description: web登录
+	 * @Author cola
+	 * @Data: 2020年2月2日
+	 * @param login
+	 * @return
+	 */
+	Msg<?> webSignIn(Login login);
 
 	
 }

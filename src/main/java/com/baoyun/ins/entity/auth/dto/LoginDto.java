@@ -5,6 +5,7 @@ import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @Description: 登录出参实体
@@ -14,6 +15,7 @@ import lombok.Data;
 
 @ApiModel("登录出参实体")
 @Data
+@Accessors(chain = true)
 public class LoginDto implements Serializable {
 
 	/**

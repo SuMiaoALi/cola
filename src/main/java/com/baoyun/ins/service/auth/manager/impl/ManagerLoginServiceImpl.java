@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ManagerLoginServiceImpl implements ManagerLoginService {
 	
 	@Autowired
-	private ManagerLoginMapper loginMapperl;
+	private ManagerLoginMapper loginMapper;
 	
 	@Autowired
 	private ManagerUserMapper userMapper;
@@ -46,13 +46,14 @@ public class ManagerLoginServiceImpl implements ManagerLoginService {
 	public Msg<Object> login(Login login) {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<Object>();
-		User user = loginMapperl.login(login.getPhone());
+		User user = loginMapper.login(login.getPhone());
 		// 用户存在
 		if (user != null && StringUtil.isNotNullOrEmpty(user.getId())) {
 			// 用户禁用
 			if (!"0".equals(user.getStatus())) {
 				msg.setCode(GlobalReturnCode.AUTH_DISABLE);
 				msg.setMessage("用户无权限");
+				return msg;
 			}
 			// 密码登录
 			if ("passwd".equals(login.getScope())) {
@@ -60,6 +61,7 @@ public class ManagerLoginServiceImpl implements ManagerLoginService {
 				if (!_password.equals(user.getPassword())) {
 					msg.setCode(GlobalReturnCode.SECRET_ERROR);
 					msg.setMessage("密码错误");
+					return msg;
 				}
 			}
 			log.info("登录成功");

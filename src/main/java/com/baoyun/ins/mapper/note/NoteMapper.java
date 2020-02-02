@@ -35,7 +35,7 @@ public interface NoteMapper {
 	@Select({
 		"<script>",
 		"SELECT n.id, n.title, n.cover, ifnull(n.comment_count, 0) as commentCount, ifnull(n.like_count, 0) as likeCount, n.author, IFNULL(n.collection_count, 0) collectionCount,",
-		"ifnull(n.view_count, 0) as viewCount, n.status, n.is_delete isDelete, n.is_draft isDraft, c.content, ",
+		"ifnull(n.view_count, 0) as viewCount, c.content, ",
 		"p.`name`, p.photo, (select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{vo.userId} and note_id = n.id) as isLiked ",
 		"FROM t_note n, t_profile p, t_note_content c ",
 		"<when test = 'vo.tagId != null and vo.tagId != \"\"'> ,(SELECT note_id FROM t_note_tag WHERE tag_id = #{vo.tagId} ) t </when>",
@@ -43,7 +43,6 @@ public interface NoteMapper {
 		" <when test='vo.tagId !=null and vo.tagId != \"\"'> and t.note_id = n.id </when>",
 		" <when test='vo.key != null'> and n.title like '%${vo.key}%' </when>",
 		" <when test='vo.author != null'> and n.author = #{vo.author} </when>",
-		" <when test='vo.status != null'> and n.status = #{vo.status} </when>",
 		"ORDER BY n.is_hot desc, publish_time desc",
 		"</script>"
 		})

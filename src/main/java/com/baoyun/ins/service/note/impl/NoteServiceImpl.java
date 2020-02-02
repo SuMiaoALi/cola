@@ -90,14 +90,18 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public Msg<Page<NoteQueryDto>> list(NoteQueryVo noteQueryVo) {
 		// 保存用户关键词
-		if(StringUtil.isNotNullOrEmpty(noteQueryVo.getKey()) && StringUtil.isNotNullOrEmpty(SpringContextUtil.getUserId())) {
-			log.info(noteQueryVo.getKey());
-			keywordMapper.save(noteQueryVo.getKey(), SpringContextUtil.getUserId());
-		} 
+//		if(StringUtil.isNotNullOrEmpty(noteQueryVo.getKey()) && StringUtil.isNotNullOrEmpty(SpringContextUtil.getUserId())) {
+//			log.info(noteQueryVo.getKey());
+//			keywordMapper.save(noteQueryVo.getKey(), SpringContextUtil.getUserId());
+//		} 
 		// 分页
-		noteQueryVo.setUserId(SpringContextUtil.getUserId());
+//		String userId = SpringContextUtil.getUserId();
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+		noteQueryVo.setUserId(userId);
+		noteQueryVo.setStatus("1");
 		PageHelper.startPage(noteQueryVo.getStart(), noteQueryVo.getPageSize());
 		List<NoteQueryDto> list = noteMapper.list(noteQueryVo); 
+		System.out.println(list);
 		Page<NoteQueryDto> pageInfo = new Page<NoteQueryDto>(list, noteQueryVo.getStart(), noteQueryVo.getPageSize());
 		return new Msg<Page<NoteQueryDto>>(pageInfo); 
 	}

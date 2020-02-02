@@ -2,6 +2,8 @@ package com.baoyun.ins.service.auth.impl;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,7 +17,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baoyun.ins.config.constant.C;
 import com.baoyun.ins.entity.auth.User;
 import com.baoyun.ins.entity.auth.dto.LoginDto;
+import com.baoyun.ins.entity.auth.manager.Role;
+import com.baoyun.ins.entity.auth.manager.Source;
+import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.ThirdBindVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.mapper.auth.LoginMapper;
@@ -213,6 +219,67 @@ public class LoginServiceImpl implements LoginService {
 		bind.setStatus("0");
 		loginMapper.thdBind(bind);
 		return user;
+	}
+
+	/**
+	 *web用户注册完善信息
+	 */
+	@Override
+	public Msg<?> webSignUp(SignUpVo signUp) {
+		// TODO Auto-generated method stub
+		String salt = PasswordUtil.salt();
+		// 密码加密
+		String _password = PasswordUtil.hex(signUp.getPassword(), salt);
+		signUp.setSalt(salt).setType("0")
+			  .setId(UUID.randomUUID().toString().replaceAll("-", ""))
+			  .setStatus("0").setPassword(_password);
+		userMapper.insertWeb(signUp);
+		userMapper.profileWeb(signUp);
+		return new Msg<>();
+	}
+
+	/**
+	 *web登录
+	 */
+	@Override
+	public Msg<?> webSignIn(Login login) {
+		// TODO Auto-generated method stub
+		Msg<Object> msg = new Msg<Object>();
+		LoginDto loginDto = new LoginDto();
+		
+		User user = loginMapper.login(login.getPhone());
+		// 用户存在
+		if (user != null && StringUtil.isNotNullOrEmpty(user.getId())) {
+			// 1、判断禁用状态
+			if (!"0".equals(user.getStatus())) {
+				msg.setCode(GlobalReturnCode.AUTH_DISABLE);
+				msg.setMessage("用户无权限");
+				return msg;
+			}
+			// 2、密码登录
+			if ("passwd".equals(login.getScope())) {
+				String _password = PasswordUtil.hex(login.getPassword(), user.getSalt());
+				if (!_password.equals(user.getPassword())) {
+					msg.setCode(GlobalReturnCode.SECRET_ERROR);
+					msg.setMessage("密码错误");
+					return msg;
+				}
+						
+			}
+			log.info("登录成功");
+			
+			Set<String> scopes = new HashSet<>();
+			scopes.add(C.USER.TYPE.USER);
+			
+			String token = TokenUtil.createToken(user.getId(), scopes, null);
+			loginDto.setRole(C.USER.TYPE.USER).setToken(token);
+			msg.setData(loginDto);
+			
+		} else {
+			msg.setCode(GlobalReturnCode.USER_NOT_EXIT);
+			msg.setMessage("用户不存在");
+		}
+		return msg;
 	}
 	
 }

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
 import com.baoyun.ins.entity.auth.User;
+import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.ThirdBindVo;
 
 /**
@@ -22,6 +23,23 @@ public interface UserMapper {
 	 */
 	@Insert("insert into t_auth_user(id, phone, password, salt, create_time, status, type) values (#{id}, #{phone}, #{password}, #{salt}, #{createTime}, #{status}, #{type}) ")
 	void insert(User user);
+	
+	/**
+	 * @Description: web用户注册
+	 * @Author cola
+	 * @Data: 2019年12月19日
+	 * @param user
+	 */
+	@Insert("insert into t_auth_user(id, phone, password, salt, create_time, status, type, answer) values (#{id}, #{phone}, #{password}, #{salt}, unix_timestamp(now()), #{status}, #{type}, #{answer} ) ")
+	void insertWeb(SignUpVo signUp);
+	
+	/**
+	 * @Description: web完善个人信息
+	 * @Author cola
+	 * @Data: 2019年12月19日
+	 */
+	@Insert("insert into `t_profile`(`user_id`, `sex`, `name`, `photo`) values (#{id}, #{sex}, #{name}, #{photo}) ")
+	void profileWeb(SignUpVo signUp);
 
 	/**
 	 * @Description: 完善个人信息

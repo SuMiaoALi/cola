@@ -22,12 +22,23 @@ public interface LoginMapper {
 	void thdBind(ThirdBindVo bind);
 
 	/**
-	 * @Description: 根据openid查询是否有用户
+	 * @Description: 根据openid查询用户
 	 * @Author cola
 	 * @Data: 2019年12月19日
 	 */
 	@Select("select u.id, u.status, u.phone, s.nick_name name, s.unionid from t_auth_user u, t_auth_sso s where u.id = s.user_id and s.type = #{1} and s.openid = #{0} limit 1 ")
 	User hasUser(String openid, String type);
+
+	/**
+	 * @Description: 根据手机号查询用户
+	 * @Author cola
+	 * @Data: 2020年2月2日
+	 * @param phone
+	 * @return
+	 */
+	@Select("select a.id, a.status, a.type, a.salt, a.password, b.name, b.photo from t_auth_user a, t_profile b " + 
+			"where a.id = b.user_id and a.phone = #{0} and a.type = 0 limit 1 ")
+	User login(String phone);
 	
 
 }

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.service.auth.LoginService;
 import com.baoyun.ins.utils.json.Msg;
@@ -47,6 +49,18 @@ public class LoginController {
 	@PostMapping("/wx/bind")
 	public Msg<Object> bind(@Valid @RequestBody BindVo bind) {
 		return loginService.bindWxApp(bind);
+	}
+	
+	@ApiOperation("web注册")
+	@PostMapping("/web/signup")
+	public Msg<?> webSignUp(@RequestBody SignUpVo signUp) {
+		return loginService.webSignUp(signUp);
+	}
+
+	@ApiOperation("web登录")
+	@PostMapping("/web/signin")
+	public Msg<?> webSignIn(@RequestBody Login login) {
+		return loginService.webSignIn(login);
 	}
 	
 	
