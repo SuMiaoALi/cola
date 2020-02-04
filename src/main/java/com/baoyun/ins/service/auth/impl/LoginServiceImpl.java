@@ -21,6 +21,7 @@ import com.baoyun.ins.entity.auth.manager.Role;
 import com.baoyun.ins.entity.auth.manager.Source;
 import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.FindPwdVo;
 import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.ThirdBindVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
@@ -278,6 +279,28 @@ public class LoginServiceImpl implements LoginService {
 		} else {
 			msg.setCode(GlobalReturnCode.USER_NOT_EXIT);
 			msg.setMessage("用户不存在");
+		}
+		return msg;
+	}
+
+	/**
+	 * 找回密码
+	 */
+	@Override
+	public Msg<?> webFind(FindPwdVo vo) {
+		// TODO Auto-generated method stub
+		Msg<Object> msg = new Msg<>();
+		Integer i = loginMapper.findPwd(vo);
+		if (i > 0) {
+			// 密保正确
+			String phone = vo.getPhone();
+			String salt = loginMapper.salt(phone);
+			// 生成新密码
+			String newPassword = PasswordUtil.hex(vo.getPassword(), salt);
+			userMapper.updatePwd(phone, newPassword);
+			msg.setCode("10000").setData("1");
+		} else {
+			msg.setCode("30002").setData("0");
 		}
 		return msg;
 	}

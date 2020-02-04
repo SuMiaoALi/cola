@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import com.baoyun.ins.entity.auth.User;
+import com.baoyun.ins.entity.auth.vo.FindPwdVo;
 import com.baoyun.ins.entity.auth.vo.ThirdBindVo;
 
 /**
@@ -39,6 +40,26 @@ public interface LoginMapper {
 	@Select("select a.id, a.status, a.type, a.salt, a.password, b.name, b.photo from t_auth_user a, t_profile b " + 
 			"where a.id = b.user_id and a.phone = #{0} and a.type = 0 limit 1 ")
 	User login(String phone);
+
+	/**
+	 * @Description: 找回密码
+	 * @Author cola
+	 * @Data: 2020年2月4日
+	 * @param vo
+	 * @return
+	 */
+	@Select("select count(1) from t_auth_user where phone = #{phone} and answer = #{answer} limit 1 ")
+	Integer findPwd(FindPwdVo vo);
+
+	/**
+	 * @Description: 根据手机号查询颜值
+	 * @Author cola
+	 * @Data: 2020年2月4日
+	 * @param phone
+	 * @return
+	 */
+	@Select("select salt from t_auth_user where phone = #{0} ")
+	String salt(String phone);
 	
 
 }

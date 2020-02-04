@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.FindPwdVo;
 import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.utils.json.Msg;
@@ -63,6 +64,15 @@ public interface LoginService {
 	 * @return
 	 */
 	Msg<?> webSignIn(Login login);
+
+	/**
+	 * @Description: 找回密码
+	 * @Author cola
+	 * @Data: 2020年2月4日
+	 * @param vo
+	 * @return
+	 */
+	Msg<?> webFind(FindPwdVo vo);
 
 	
 }

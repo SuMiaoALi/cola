@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
+import com.baoyun.ins.entity.auth.vo.FindPwdVo;
 import com.baoyun.ins.entity.auth.vo.SignUpVo;
 import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.service.auth.LoginService;
@@ -63,5 +64,10 @@ public class LoginController {
 		return loginService.webSignIn(login);
 	}
 	
+	@ApiOperation("找回密码")
+	@PostMapping("/web/find")
+	public Msg<?> webFind(@RequestBody FindPwdVo vo) {
+		return loginService.webFind(vo);
+	}
 	
 }

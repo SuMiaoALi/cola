@@ -5,6 +5,7 @@ import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 公共返回消息实体
@@ -13,6 +14,7 @@ import lombok.Data;
  */
 @ApiModel
 @Data
+@Accessors(chain = true)
 public class Msg<T> implements Serializable {
 	
 	/**

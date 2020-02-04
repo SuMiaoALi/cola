@@ -84,5 +84,14 @@ public interface UserMapper {
 	})
 	void update(@Param("vo") User user);
 
+	/**
+	 * @Description: 修改密码
+	 * @Author cola
+	 * @Data: 2020年2月4日
+	 * @param vo
+	 */
+	@Update("update t_auth_user set password = #{1} where phone = #{0} ")
+	void updatePwd(String phone, String password);
+
 	
 }
