@@ -39,7 +39,7 @@ public class Swagger2 implements WebMvcConfigurer {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("问故知新接口文档")
+                .title("CloudAPI接口文档")
                 .version("1.0")
                 .build();
     }

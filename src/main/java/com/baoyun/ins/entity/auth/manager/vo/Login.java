@@ -21,8 +21,8 @@ public class Login implements Serializable {
 	@NotNull
 	private String phone;
 	
-	@ApiModelProperty("密码")
-	private String password; //可为密码/动态密码
+	@ApiModelProperty("密码或verifyCode")
+	private String password; 
 	
 	@ApiModelProperty("作用域:账号密码登录：passwd；动态密码登录：sms")
 	private String scope;

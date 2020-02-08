@@ -93,5 +93,4 @@ public interface UserMapper {
 	@Update("update t_auth_user set password = #{1} where phone = #{0} ")
 	void updatePwd(String phone, String password);
 
-	
 }

@@ -1,6 +1,6 @@
 spring:
     profiles:
-        active: dev
+        active: docker--link
 ---
 # 开发环境    ---：文档块
 spring:
@@ -39,6 +39,13 @@ wx:
         appid: wx5b484b45745a47d3
         appsecret: 699c9d167705475a59c2ec338467e03e
         modelId: 9_BkwwFE-R8D0ymqVFRXezkXb5EFO4pitu3ZqJC7r-0
+# 阿里云配置
+ali:
+    accessKeyId: LTAI4FqU3i4Zy2Uu4AraQb8a
+    accessKeySecret: IDFwQsOiVL12Jexh7nEFGH1xlipJwT
+    templateCode: SMS_183240580
+    signName: CloudAPI社区
+# 日志级别
 logging:
     level:
         com:
@@ -84,6 +91,13 @@ wx:
         appid: wx5b484b45745a47d3
         appsecret: 699c9d167705475a59c2ec338467e03e
         modelId: 9_BkwwFE-R8D0ymqVFRXezkXb5EFO4pitu3ZqJC7r-0
+# 阿里云配置
+ali:
+    accessKeyId: LTAI4FqU3i4Zy2Uu4AraQb8a
+    accessKeySecret: IDFwQsOiVL12Jexh7nEFGH1xlipJwT
+    templateCode: SMS_183240580
+    signName: CloudAPI社区
+# 日志级别
 logging:
     level:
         com:
@@ -128,6 +142,13 @@ wx:
         appid: wx5b484b45745a47d3
         appsecret: 699c9d167705475a59c2ec338467e03e
         modelId: 9_BkwwFE-R8D0ymqVFRXezkXb5EFO4pitu3ZqJC7r-0
+# 阿里云配置
+ali:
+    accessKeyId: LTAI4FqU3i4Zy2Uu4AraQb8a
+    accessKeySecret: IDFwQsOiVL12Jexh7nEFGH1xlipJwT
+    templateCode: SMS_183240580
+    signName: CloudAPI社区
+# 日志级别
 logging:
     level:
         com:

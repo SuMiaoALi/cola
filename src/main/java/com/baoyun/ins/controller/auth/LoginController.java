@@ -70,4 +70,11 @@ public class LoginController {
 		return loginService.webFind(vo);
 	}
 	
+	@ApiOperation("发送验证码")
+	@PostMapping
+	public Msg<?> sendVerifyCode(String phone) {
+		return loginService.sendVreifyCode(phone);
+	}
+	
+	
 }

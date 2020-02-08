@@ -74,5 +74,14 @@ public interface LoginService {
 	 */
 	Msg<?> webFind(FindPwdVo vo);
 
+	/**
+	 * @Description: 发送验证码
+	 * @Author cola
+	 * @Data: 2020年2月7日
+	 * @param phone
+	 * @return
+	 */
+	Msg<?> sendVreifyCode(String phone);
+
 	
 }

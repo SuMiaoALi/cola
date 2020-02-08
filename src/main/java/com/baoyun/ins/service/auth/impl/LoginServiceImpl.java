@@ -2,8 +2,6 @@ package com.baoyun.ins.service.auth.impl;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,8 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.baoyun.ins.config.constant.C;
 import com.baoyun.ins.entity.auth.User;
 import com.baoyun.ins.entity.auth.dto.LoginDto;
-import com.baoyun.ins.entity.auth.manager.Role;
-import com.baoyun.ins.entity.auth.manager.Source;
 import com.baoyun.ins.entity.auth.manager.vo.Login;
 import com.baoyun.ins.entity.auth.vo.BindVo;
 import com.baoyun.ins.entity.auth.vo.FindPwdVo;
@@ -28,9 +24,12 @@ import com.baoyun.ins.entity.auth.vo.WxLoginVo;
 import com.baoyun.ins.mapper.auth.LoginMapper;
 import com.baoyun.ins.mapper.auth.UserMapper;
 import com.baoyun.ins.service.auth.LoginService;
+import com.baoyun.ins.utils.ali.SmsUtil;
 import com.baoyun.ins.utils.http.HttpClientUtils;
 import com.baoyun.ins.utils.json.GlobalReturnCode;
 import com.baoyun.ins.utils.json.Msg;
+import com.baoyun.ins.utils.redis.RedisConstant;
+import com.baoyun.ins.utils.redis.RedisUtil;
 import com.baoyun.ins.utils.string.StringUtil;
 import com.baoyun.ins.utils.string.WXCore;
 import com.baoyun.ins.utils.token.PasswordUtil;
@@ -59,7 +58,17 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private SmsUtil smsUtil;
+	
+	@Autowired
+	private RedisUtil redisUtil;
 
+	// 阿里key
+	@Value("${ali.accessKeyId}")
+	private String accessKeyId;
+	
 	/**
 	 * 微信小程序登录
 	 */
@@ -246,9 +255,13 @@ public class LoginServiceImpl implements LoginService {
 	public Msg<?> webSignIn(Login login) {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<Object>();
+		// JWT
 		LoginDto loginDto = new LoginDto();
+		// 登录渠道
+		String channel = login.getScope();
+		String phone = login.getPhone();
 		
-		User user = loginMapper.login(login.getPhone());
+		User user = loginMapper.login(phone);
 		// 用户存在
 		if (user != null && StringUtil.isNotNullOrEmpty(user.getId())) {
 			// 1、判断禁用状态
@@ -257,23 +270,44 @@ public class LoginServiceImpl implements LoginService {
 				msg.setMessage("用户无权限");
 				return msg;
 			}
+			
 			// 2、密码登录
-			if ("passwd".equals(login.getScope())) {
+			if ("passwd".equals(channel)) {
 				String _password = PasswordUtil.hex(login.getPassword(), user.getSalt());
 				if (!_password.equals(user.getPassword())) {
 					msg.setCode(GlobalReturnCode.SECRET_ERROR);
 					msg.setMessage("密码错误");
 					return msg;
 				}
-						
 			}
+			
+			// 3、验证码登录
+			if ("sms".equals(channel)) {
+				if (redisUtil.exists(RedisConstant.SMS + phone)) {
+					// 验证码
+					String code = redisUtil.get(RedisConstant.SMS + phone, String.class);
+					if (login.getPassword().equals(code)) {
+						// 登录成功
+						msg.setCode("10000");
+						msg.setMessage("登录成功");
+					} else {
+						msg.setCode(GlobalReturnCode.SMS_CODE_ERROR);
+						msg.setMessage("验证码错误");
+						return msg;
+					}
+				} else {
+					msg.setCode("Redis_Error");
+					msg.setMessage("抱歉，Redis比较调皮，外出游玩去了，请再试一下噢~");
+					return msg;
+				}
+			}			
 			log.info("登录成功");
 			
 			Set<String> scopes = new HashSet<>();
 			scopes.add(C.USER.TYPE.USER);
 			
 			String token = TokenUtil.createToken(user.getId(), scopes, null);
-			loginDto.setRole(C.USER.TYPE.USER).setToken(token);
+			loginDto.setRole(C.USER.TYPE.USER).setToken(token).setName(user.getName()).setPhoto(user.getPhoto());
 			msg.setData(loginDto);
 			
 		} else {
@@ -284,7 +318,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	/**
-	 * 找回密码
+	 * 找回密码（密保式）
 	 */
 	@Override
 	public Msg<?> webFind(FindPwdVo vo) {
@@ -298,11 +332,21 @@ public class LoginServiceImpl implements LoginService {
 			// 生成新密码
 			String newPassword = PasswordUtil.hex(vo.getPassword(), salt);
 			userMapper.updatePwd(phone, newPassword);
-			msg.setCode("10000").setData("1");
+			msg.setCode("10000").setMessage("修改成功");
 		} else {
-			msg.setCode("30002").setData("0");
+			msg.setCode("30002").setMessage("修改失败");
 		}
 		return msg;
+	}
+
+	/**
+	 * 发送验证码
+	 */
+	@Override
+	public Msg<?> sendVreifyCode(String phone) {
+		// TODO Auto-generated method stub
+		log.info(accessKeyId);
+		return smsUtil.sendSms(phone);
 	}
 	
 }

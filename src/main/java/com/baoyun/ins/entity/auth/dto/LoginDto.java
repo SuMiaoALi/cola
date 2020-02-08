@@ -17,7 +17,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class LoginDto implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -35,8 +34,18 @@ public class LoginDto implements Serializable {
 	@ApiModelProperty("sessionKey")
 	private String session;
 	
-	private String version = "1.0";
+	@ApiModelProperty("name")
+	private String name;
 	
-	private String code = "1.0";
+	@ApiModelProperty("photo")
+	private String photo;
+	
+	@ApiModelProperty("版本号")
+	private String version = "1.0.0";
+	
+	@ApiModelProperty("版本代码")
+	private String code = "1.0.0";
+	
+	
 
 }
