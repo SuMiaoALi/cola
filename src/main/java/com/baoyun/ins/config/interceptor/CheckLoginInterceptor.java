@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,17 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baoyun.ins.config.annotation.RequiredPermission;
 import com.baoyun.ins.config.annotation.RequiredRole;
-import com.baoyun.ins.utils.json.GlobalReturnCode;
-import com.baoyun.ins.utils.json.JsonUtil;
-import com.baoyun.ins.utils.json.Msg;
 import com.baoyun.ins.utils.string.StringUtil;
-import com.baoyun.ins.utils.token.TokenUtil;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class CheckLoginInterceptor implements HandlerInterceptor {

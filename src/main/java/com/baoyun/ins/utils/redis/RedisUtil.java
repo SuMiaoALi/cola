@@ -52,7 +52,8 @@ public class RedisUtil {
         redisTemplate.execute(new RedisCallback<Object>() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.setEx(redisTemplate.getStringSerializer().serialize(key), l, vbytes);
+                // setex key time value
+            	connection.setEx(redisTemplate.getStringSerializer().serialize(key), l, vbytes);
                 return null;
             }
         });
@@ -107,11 +108,12 @@ public class RedisUtil {
      * @throws
      */
     public boolean exists(final String key) {
+    	// 对传入的key先序列化
         final byte[] keyBytes = redisTemplate.getStringSerializer().serialize(key);
         return redisTemplate.execute(new RedisCallback<Boolean>() {
             @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                
+                // exists key
                 return connection.exists(keyBytes);
             }
         });

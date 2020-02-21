@@ -51,8 +51,7 @@ public class SignUpVo implements Serializable {/**
 	@ApiModelProperty(hidden = true)
 	private String status; 
 	
-	@ApiModelProperty("密保")
-	private String answer; 
-	
+	@ApiModelProperty("验证码")
+	private String code;
 
 }

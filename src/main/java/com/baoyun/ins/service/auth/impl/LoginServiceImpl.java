@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.utils.StringUtils;
 import com.baoyun.ins.config.constant.C;
 import com.baoyun.ins.entity.auth.User;
 import com.baoyun.ins.entity.auth.dto.LoginDto;
@@ -237,15 +238,42 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public Msg<?> webSignUp(SignUpVo signUp) {
 		// TODO Auto-generated method stub
-		String salt = PasswordUtil.salt();
-		// 密码加密
-		String _password = PasswordUtil.hex(signUp.getPassword(), salt);
-		signUp.setSalt(salt).setType("0")
-			  .setId(UUID.randomUUID().toString().replaceAll("-", ""))
-			  .setStatus("0").setPassword(_password);
-		userMapper.insertWeb(signUp);
-		userMapper.profileWeb(signUp);
-		return new Msg<>();
+		Msg<Object> msg = new Msg<>();
+		String phone = signUp.getPhone();
+		String isExists = loginMapper.salt(phone);
+	    // 说明手机号已被注册
+		if (StringUtil.isNotNullOrEmpty(isExists)) {
+			msg.setCode(GlobalReturnCode.PROFILE_PHONE_EXIT);
+			msg.setMessage("手机号已注册");
+			return msg;
+		}
+		String code = signUp.getCode();
+		// 发送出去的code
+		try {
+			if (redisUtil.exists(RedisConstant.SMS + phone)) {
+				String _code = redisUtil.get(RedisConstant.SMS + phone, String.class);
+				// 验证码错误
+				if (!code.equals(_code)) {
+					msg.setCode(GlobalReturnCode.SMS_CODE_ERROR);
+					msg.setMessage("验证码错误");
+					return msg;
+				}
+				String salt = PasswordUtil.salt();
+				// 密码加密
+				String _password = PasswordUtil.hex(signUp.getPassword(), salt);
+				signUp.setSalt(salt).setType("0")
+					  .setId(UUID.randomUUID().toString().replaceAll("-", ""))
+					  .setStatus("0").setPassword(_password);
+				userMapper.insertWeb(signUp);
+				userMapper.profileWeb(signUp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg.setCode(GlobalReturnCode.REDIS_ERROR);
+			msg.setMessage("Redis服务器连接不上了mmp，我回头教训它，请重试一下噢");
+			return msg;
+		} 
+		return msg;
 	}
 
 	/**
@@ -283,21 +311,23 @@ public class LoginServiceImpl implements LoginService {
 			
 			// 3、验证码登录
 			if ("sms".equals(channel)) {
-				if (redisUtil.exists(RedisConstant.SMS + phone)) {
-					// 验证码
-					String code = redisUtil.get(RedisConstant.SMS + phone, String.class);
-					if (login.getPassword().equals(code)) {
-						// 登录成功
-						msg.setCode("10000");
-						msg.setMessage("登录成功");
-					} else {
-						msg.setCode(GlobalReturnCode.SMS_CODE_ERROR);
-						msg.setMessage("验证码错误");
-						return msg;
-					}
-				} else {
-					msg.setCode("Redis_Error");
-					msg.setMessage("抱歉，Redis比较调皮，外出游玩去了，请再试一下噢~");
+				try {
+					if (redisUtil.exists(RedisConstant.SMS + phone)) {
+						// 验证码
+						String code = redisUtil.get(RedisConstant.SMS + phone, String.class);
+						if (login.getPassword().equals(code)) {
+							// 登录成功
+							msg.setCode("10000");
+							msg.setMessage("登录成功");
+						} else {
+							msg.setCode(GlobalReturnCode.SMS_CODE_ERROR);
+							msg.setMessage("验证码错误");
+							return msg;
+						}
+					} 
+				} catch (Exception e) {
+					msg.setCode(GlobalReturnCode.REDIS_ERROR);
+					msg.setMessage("Redis服务器连接不上了mmp，我回头教训它，请重试一下噢");
 					return msg;
 				}
 			}			
@@ -345,8 +375,15 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public Msg<?> sendVreifyCode(String phone) {
 		// TODO Auto-generated method stub
-		log.info(accessKeyId);
-		return smsUtil.sendSms(phone);
+		Msg<?> msg = new Msg<>();
+		log.info(phone);
+		if (StringUtil.isNotNullOrEmpty(phone)) {
+			msg = smsUtil.sendSms(phone);
+		} else {
+			msg.setCode(GlobalReturnCode.OPERA_FAILURE);
+			msg.setMessage("操作失败");
+		}
+		return msg;
 	}
 	
 }

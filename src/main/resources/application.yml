@@ -1,6 +1,6 @@
 spring:
     profiles:
-        active: docker--link
+        active: dev
 ---
 # 开发环境    ---：文档块
 spring:
@@ -22,9 +22,9 @@ spring:
         pool:
             max-active: 8
             max-wait: -1
-            max-idle: 300
+            max-idle: 10
             min-idle: 0
-        timeout: 10000
+        timeout: 15000
 server:
     port: 8888
 pagehelper:
@@ -74,7 +74,7 @@ spring:
         pool:
             max-active: 8
             max-wait: -1
-            max-idle: 300
+            max-idle: 10
             min-idle: 0
         timeout: 10000
 server:
@@ -107,7 +107,7 @@ logging:
 ---
 # docker --link环境
 spring:
-    profiles: docker--link
+    profiles: docker
     application: 
         name: ins-cola
     aop: 
@@ -118,14 +118,14 @@ spring:
         password: 123456
         driver-class-name: com.mysql.cj.jdbc.Driver
     redis:
-        host: redis
+        host: 122.51.15.106
         password: 123456
         port: 6379  
         database: 1
         pool:
             max-active: 8
             max-wait: -1
-            max-idle: 300
+            max-idle: 10
             min-idle: 0
         timeout: 10000
 server:

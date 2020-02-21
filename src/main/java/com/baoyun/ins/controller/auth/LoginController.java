@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,8 +72,8 @@ public class LoginController {
 	}
 	
 	@ApiOperation("发送验证码")
-	@PostMapping
-	public Msg<?> sendVerifyCode(String phone) {
+	@PostMapping("/sms/{phone}")
+	public Msg<?> sendVerifyCode(@PathVariable String phone) {  //@PathVariable 只有一个基本参数时使用，接收URL中的路径变量进行注入
 		return loginService.sendVreifyCode(phone);
 	}
 	

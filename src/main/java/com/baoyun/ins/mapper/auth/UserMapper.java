@@ -30,7 +30,7 @@ public interface UserMapper {
 	 * @Data: 2019年12月19日
 	 * @param user
 	 */
-	@Insert("insert into t_auth_user(id, phone, password, salt, create_time, status, type, answer) values (#{id}, #{phone}, #{password}, #{salt}, unix_timestamp(now()), #{status}, #{type}, #{answer} ) ")
+	@Insert("insert into t_auth_user(id, phone, password, salt, create_time, status, type) values (#{id}, #{phone}, #{password}, #{salt}, unix_timestamp(now()), #{status}, #{type}) ")
 	void insertWeb(SignUpVo signUp);
 	
 	/**

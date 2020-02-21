@@ -61,6 +61,9 @@ public class NoteQueryDto implements Serializable {
 	@ApiModelProperty("是否点赞")
 	private String isLiked;
 	
+	@ApiModelProperty("是否收藏")
+	private String isCollected;
+	
 	@ApiModelProperty("状态, 0-待审核，1-已通过")
 	private String status;
 

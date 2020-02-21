@@ -83,11 +83,11 @@ public class SmsUtil {
 			// 解析jsonstr
 			JSONObject json = JSONObject.parseObject(response.getData());
 			// 发送成功
-			if ("OK".equals(json.getString("code"))) {
+			if ("OK".equals(json.getString("Code"))) {
 				redisUtil.set(RedisConstant.SMS + phone, code, 7200000); //code有效期30分钟
 			} else {
 				msg.setCode(GlobalReturnCode.OPERA_FAILURE);
-    			msg.setMessage(json.getString("Message"));
+    			msg.setMessage(json.getString("失败"));
 			}
 		}
 		catch(Exception e) {

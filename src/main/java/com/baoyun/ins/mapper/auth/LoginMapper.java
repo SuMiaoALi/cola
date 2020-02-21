@@ -38,7 +38,7 @@ public interface LoginMapper {
 	 * @return
 	 */
 	@Select("select a.id, a.status, a.type, a.salt, a.password, b.name, b.photo from t_auth_user a, t_profile b " + 
-			"where a.id = b.user_id and a.phone = #{0} and a.type = 0 limit 1 ")
+			"where a.id = b.user_id and a.phone = #{0} limit 1 ")
 	User login(String phone);
 
 	/**

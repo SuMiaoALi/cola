@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableAsync
-@EnableScheduling
 @MapperScan("com.baoyun.ins.mapper")
+@EnableScheduling
 public class InsColaApplication {
 
 	public static void main(String[] args) {

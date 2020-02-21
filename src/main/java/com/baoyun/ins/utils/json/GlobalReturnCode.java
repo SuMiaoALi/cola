@@ -33,6 +33,11 @@ public class GlobalReturnCode {
      * 验签失败
      */
     public static final String SIGNATURE_VALID_FAILE = "10006";
+    
+    /**
+     * Redis失连
+     */
+    public static final String REDIS_ERROR = "10007";
 
     /**
      * 无权限
