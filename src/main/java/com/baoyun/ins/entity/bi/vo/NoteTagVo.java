@@ -1,8 +1,11 @@
 package com.baoyun.ins.entity.bi.vo;
 
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @Description: 帖子标签实体
@@ -12,16 +15,19 @@ import lombok.Data;
 
 @ApiModel("帖子标签实体")
 @Data
-public class NoteTagVo {
+@Accessors(chain = true)
+public class NoteTagVo implements Serializable {
 	
-	@ApiModelProperty(value = "id", hidden = true)
-	private Long id;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@ApiModelProperty("标签名")
 	private String tag;
 	
 	@ApiModelProperty("标签ID")
-	private Integer tagId;
+	private Integer id;
 	
 	@ApiModelProperty(value = "父标签ID", hidden = true)
 	private Integer parentId;

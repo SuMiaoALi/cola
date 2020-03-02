@@ -327,7 +327,7 @@ public class LoginServiceImpl implements LoginService {
 					} 
 				} catch (Exception e) {
 					msg.setCode(GlobalReturnCode.REDIS_ERROR);
-					msg.setMessage("Redis服务器连接不上了mmp，我回头教训它，请重试一下噢");
+					msg.setMessage("Redis服务器连接不上了mmp，我回头再教训它，请重试一下噢");
 					return msg;
 				}
 			}			

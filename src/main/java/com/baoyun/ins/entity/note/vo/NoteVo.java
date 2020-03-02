@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baoyun.ins.entity.bi.vo.NoteTagVo;
 
@@ -24,13 +25,12 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class NoteVo implements Serializable {
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(value = "id")
+	@ApiModelProperty(value = "id", hidden = true)
 	private Integer id;
 	
 	@ApiModelProperty("标题")
@@ -47,19 +47,25 @@ public class NoteVo implements Serializable {
 	@ApiModelProperty(value = "描述", hidden = true)
 	private String description;
 	
-	@ApiModelProperty("标签")
-	private List<NoteTagVo> tags;
+	@ApiModelProperty("帖子标签")
+	private NoteTagVo tag;
 	
-	@ApiModelProperty(value = "作者", hidden = true)
+	@ApiModelProperty(value = "作者id", hidden = true)
 	private String author;
 	
-	@ApiModelProperty(value = "是否是草稿, 1-不是", hidden = true)
-	private String isDraft;
-	
-	@ApiModelProperty("状态： 0-待审核，1-通过，2-拒绝")
+	@ApiModelProperty(value = "状态： 0-待审核，1-通过，2-拒绝", hidden = true)
 	private String status;
 	
+	@ApiModelProperty(value = "删除：0 -未删除, 1-已删除", hidden = true)
+	private String delete;
+	
+	@ApiModelProperty(value = "热帖")
+	private String hot;
+	
 	@ApiModelProperty("图片")
-	private List<NoteImgVo> images;
+	private MultipartFile file;
+	
+	@ApiModelProperty("图片")
+	private List<String> images;
 	
 }

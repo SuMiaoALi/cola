@@ -113,7 +113,7 @@
 		    <groupId>io.swagger</groupId>
 		    <artifactId>swagger-annotations</artifactId>
 		    <version>1.5.21</version>
-		</dependency>
+		</dependency> 
 		
 		<dependency>
 		    <groupId>io.swagger</groupId>
@@ -124,8 +124,21 @@
 		<dependency>
 		  <groupId>com.github.xiaoymin</groupId>
 		  <artifactId>swagger-bootstrap-ui</artifactId>
-		  <version>1.9.0</version>
+		  <version>1.9.6</version>
 		</dependency>
+		
+		<!--  knife4j
+		<dependency>
+		  <groupId>com.github.xiaoymin</groupId>
+		  <artifactId>knife4j-bootstrap-ui</artifactId>
+		  <version>${lastVersion}</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.github.xiaoymin</groupId>
+		  <artifactId>knife4j-spring-boot-starter</artifactId>
+		  <version>${knife4j.version}</version>
+		</dependency> -->
 		
 		<dependency>
 			<groupId>org.apache.shiro</groupId>

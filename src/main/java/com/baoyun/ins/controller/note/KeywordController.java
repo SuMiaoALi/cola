@@ -4,51 +4,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baoyun.ins.config.annotation.CanTourist;
-import com.baoyun.ins.entity.note.dto.KeywordDto;
-import com.baoyun.ins.entity.note.vo.KeywordQueryVo;
-import com.baoyun.ins.service.note.KeywordService;
+import com.baoyun.ins.service.keyword.KeywordService;
 import com.baoyun.ins.utils.json.Msg;
-import com.baoyun.ins.utils.pagehelper.Page;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-
 /**
- * @Description: 关键字接口
+ * @Description: 搜索关键词
  * @Author cola
- * @Date 2020年1月6日
+ * @Date 2020年2月28日
  */
 
-@Api(tags = "关键字接口")
+@Api(tags = "关键词接口")
 @RestController
 @RequestMapping("/keyword")
 public class KeywordController {
-
+	
 	@Autowired
-	private KeywordService keywordService;
+	private KeywordService keywordSerice;
 	
-	@ApiOperation("用户关键字查询")
-	@GetMapping
-	@CanTourist(value = true)
-	public Msg<Page<KeywordDto>> list(KeywordQueryVo KeywordVo){
-		return keywordService.list(KeywordVo);
-	}
+	@ApiOperation("根据关键词查询帖子")
+	@GetMapping("/{keyword}")
+	public Msg<?> listNote(@PathVariable String keyword) {
+		System.out.println(keyword);
+		return keywordSerice.listNote(keyword);
+	}	
 	
-	@ApiOperation("关键字删除")
-	@DeleteMapping("/{keyword}")
-	public Msg<?> delete(@PathVariable String keyword){
-		return keywordService.delete(keyword);
-	}
+	@ApiOperation("保存用户关键字")
+	@PostMapping("/save/{keyword}")
+	public Msg<?> save(@PathVariable String keyword) {
+		return keywordSerice.save(keyword);
+	}	
 	
-	@ApiOperation("匹配关键字查询")
-	@GetMapping("/allKeyword")
-	@CanTourist(value = true)
-	public Msg<Page<KeywordDto>> allKeyword(KeywordQueryVo KeywordVo){
-		return keywordService.allKeyword(KeywordVo);
-	}
+	@ApiOperation("删除用户关键字")
+	@DeleteMapping("/del/{keyword}")
+	public Msg<?> delete(@PathVariable String keyword) {
+		return keywordSerice.delete(keyword);
+	}	
+	
 }

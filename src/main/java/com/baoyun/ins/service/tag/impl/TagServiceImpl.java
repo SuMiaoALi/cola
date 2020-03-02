@@ -36,11 +36,11 @@ public class TagServiceImpl implements TagService {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<>();
 //		if (redisUtil.exists(RedisConstant.BI_TAGS)) {
-//			msg.setData(redisUtil.get("RedisConstant.BI_TAGS", List.class));
+//			msg.setData(redisUtil.get(RedisConstant.BI_TAGS, List.class));
 //			return msg;
 //		}
 		List<TagDto> list = tagMapper.list();
-//		redisUtil.set(RedisConstant.BI_TAGS, _list);
+//		redisUtil.set(RedisConstant.BI_TAGS, list);
 		msg.setData(list);
 		return msg;
 	}

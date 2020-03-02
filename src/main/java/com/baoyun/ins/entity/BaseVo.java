@@ -25,7 +25,7 @@ public class BaseVo implements Serializable {
 	private Integer start = 1;
 	
 	@ApiModelProperty("分页大小")
-	private Integer pageSize = 20;
+	private Integer pageSize = 10;
 	
 	@ApiModelProperty("当前用户")
 	private String currentUserId;

@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baoyun.ins.aspect.Notify;
 import com.baoyun.ins.config.annotation.CanTourist;
 import com.baoyun.ins.entity.BaseVo;
 import com.baoyun.ins.entity.note.dto.NoteQueryDto;
+import com.baoyun.ins.entity.note.vo.CommentQueryVo;
 import com.baoyun.ins.entity.note.vo.NoteQueryVo;
 import com.baoyun.ins.entity.note.vo.NoteVo;
 import com.baoyun.ins.service.note.NoteService;
 import com.baoyun.ins.utils.json.Msg;
 import com.baoyun.ins.utils.pagehelper.Page;
-import com.baoyun.ins.utils.spring.SpringContextUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +44,7 @@ public class NoteController {
 	@GetMapping
 	@CanTourist(true)
 	public Msg<Page<NoteQueryDto>> list(NoteQueryVo noteQueryVo){
+		System.out.println(noteQueryVo);
 		return noteService.list(noteQueryVo);
 	}
 	
@@ -54,33 +56,42 @@ public class NoteController {
 	}
 	
 	@ApiOperation("查询用户的笔记")
-	@GetMapping("/userid/{id}")
+	@GetMapping("/userId/{id}")
 	@CanTourist(value = true)
-	public Msg<Page<NoteQueryDto>> others(@PathVariable String id, BaseVo baseVo){
+	public Msg<?> others(@PathVariable String id, BaseVo baseVo){
+		System.out.println("接收的查阅寻用户的id：" + id);
+		// 是当前登录用户，即查询自己的发布
+		if ("self".equals(id)) {
+			return noteService.mine(baseVo);
+		}
+		// 否则是查询别人的
 		NoteQueryVo noteQueryVo = new NoteQueryVo();
 		noteQueryVo.setAuthor(id);
-		noteQueryVo.setStatus("1");
 		noteQueryVo.setStart(baseVo.getStart());
 		noteQueryVo.setPageSize(baseVo.getPageSize());
 		return noteService.list(noteQueryVo);
 	}
 	
-	@ApiOperation("查询我的笔记")
-	@GetMapping("/mine")
-	public Msg<Page<NoteQueryDto>> mine(BaseVo baseVo){
-		NoteQueryVo noteQueryVo = new NoteQueryVo();
-		noteQueryVo.setAuthor(SpringContextUtil.getUserId());
-		noteQueryVo.setStart(baseVo.getStart());
-		noteQueryVo.setStatus(null);
-		noteQueryVo.setPageSize(baseVo.getPageSize());
-		return noteService.list(noteQueryVo);
+	@ApiOperation("查询收藏帖子")
+	@GetMapping("/mine/collect/{userId}")
+	public Msg<?> myCollection(@PathVariable String userId, BaseVo baseVo){
+		return noteService.myCollection(userId, baseVo);
+	}
+	
+	@ApiOperation("查询点赞帖子")
+	@GetMapping("/mine/like/{userId}")
+	public Msg<?> myLike(@PathVariable String userId, BaseVo baseVo){
+		return noteService.myLike(userId, baseVo);
 	}
 	
 	@Notify(type = "note", method = "A")
 	@ApiOperation("保存笔记")
-	@PostMapping
+	@PostMapping("/save")
 	public Msg<?> save(@Valid @RequestBody NoteVo noteVo){
-		return noteService.save(noteVo);
+//		return noteService.save(noteVo);
+		System.out.println(noteVo);
+//		System.out.println(file);
+		return null;
 	}
 	
 	@ApiOperation("点赞")
@@ -118,6 +129,12 @@ public class NoteController {
 	@DeleteMapping("/{id}")
 	public Msg<?> delete(@PathVariable Long id){
 		return noteService.delete(id);
+	}
+	
+	@ApiOperation("查询帖子评论")
+	@GetMapping("/comment")
+	public Msg<?> comment(CommentQueryVo commentVo) {
+		return noteService.comment(commentVo);
 	}
 	
 }

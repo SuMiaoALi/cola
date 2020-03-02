@@ -68,44 +68,44 @@ public class ManagerNoteServiceImpl implements ManagerNoteService {
 	@Override
 	public Msg<?> get(Long id) {
 		// TODO Auto-generated method stub
-		NoteDetailDto ndd = noteMapper.get(id);
-		if (ndd != null) {
-			String tags = noteMapper.getTags(id);
-			String imgs = noteMapper.getImg(id);		
-			ndd.setTags(tags);
-			ndd.setImgs(imgs);
-			// 查询日记评论
-			NoteCommentQueryVo noteCommentQueryVo = new NoteCommentQueryVo(); 
-			noteCommentQueryVo.setNoteId(id); 
-			List<NoteCommentDto> list = commentMapper.list(noteCommentQueryVo); 
-			List<NoteCommentDto> parentList = list.stream()
-					.filter(item -> StringUtil.isNullOrEmpty(item.getApplyId() == null ? "":item.getApplyId().toString()))
-					.map(item->{
-						item.setChildren(new ArrayList<NoteCommentDto>());
-						return item;
-					}).collect(Collectors.toList());
-			log.info(parentList.toString());
-			// 转换成列表
-			List<NoteCommentDto> childrenList = list.stream().filter(item -> StringUtil.isNotNullOrEmpty(item.getApplyId() == null ? "":item.getApplyId().toString())).collect(Collectors.toList());
-			 
-			for(NoteCommentDto i:childrenList) {
-				for(NoteCommentDto j:parentList) {
-					if(i.getApplyId() == j.getId()) {
-						j.getChildren().add(i);
-						break;
-					}
-				} 
-			};
-			log.info(parentList.toString());
-	//		noteCommentQueryVo.setNullApplyId(null);
-	//		list.stream().forEach(item -> { 
-	//				noteCommentQueryVo.setApplyId(item.getId());
-	//				item.setChildren(commentMapper.list(noteCommentQueryVo));
-	// 
-	//		}); 
-			ndd.setCommentList(parentList);
-		}
-		return new Msg<>(ndd);
+//		NoteDetailDto ndd = noteMapper.get(id);
+//		if (ndd != null) {
+//			String tags = noteMapper.getTags(id);
+//			String imgs = noteMapper.getImg(id);		
+//			ndd.setTags(tags);
+//			ndd.setImgs(imgs);
+//			// 查询日记评论
+//			NoteCommentQueryVo noteCommentQueryVo = new NoteCommentQueryVo(); 
+//			noteCommentQueryVo.setNoteId(id); 
+//			List<NoteCommentDto> list = commentMapper.list(noteCommentQueryVo); 
+//			List<NoteCommentDto> parentList = list.stream()
+//					.filter(item -> StringUtil.isNullOrEmpty(item.getApplyId() == null ? "":item.getApplyId().toString()))
+//					.map(item->{
+//						item.setChildren(new ArrayList<NoteCommentDto>());
+//						return item;
+//					}).collect(Collectors.toList());
+//			log.info(parentList.toString());
+//			// 转换成列表
+//			List<NoteCommentDto> childrenList = list.stream().filter(item -> StringUtil.isNotNullOrEmpty(item.getApplyId() == null ? "":item.getApplyId().toString())).collect(Collectors.toList());
+//			 
+//			for(NoteCommentDto i:childrenList) {
+//				for(NoteCommentDto j:parentList) {
+//					if(i.getApplyId() == j.getId()) {
+//						j.getChildren().add(i);
+//						break;
+//					}
+//				} 
+//			};
+//			log.info(parentList.toString());
+//	//		noteCommentQueryVo.setNullApplyId(null);
+//	//		list.stream().forEach(item -> { 
+//	//				noteCommentQueryVo.setApplyId(item.getId());
+//	//				item.setChildren(commentMapper.list(noteCommentQueryVo));
+//	// 
+//	//		}); 
+//			ndd.setCommentList(parentList);
+//		}
+		return new Msg<>();
 	}
 
 	/**

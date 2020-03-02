@@ -24,13 +24,18 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	private CommentMapper commentMapper;
 
+	/**
+	 *保存评论
+	 */
 	@Override
 	@Transactional
 	public Msg<?> save(CommentVo commentVo) {
 		// TODO Auto-generated method stub
-		commentVo.setCommenter(SpringContextUtil.getUserId());
+		String userId = "addcd2394d354ebfbd8da62145d25df7";
+//		String userId = SpringContextUtil.getUserId();
+		commentVo.setCommenter(userId);
 		commentMapper.save(commentVo);
-		return new Msg<>();
+		return new Msg<>(commentVo.getId());
 	}
 
 	@Override

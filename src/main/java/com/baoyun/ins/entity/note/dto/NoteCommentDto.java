@@ -32,19 +32,16 @@ public class NoteCommentDto implements Serializable {
 	private String content;
 	
 	@ApiModelProperty("评论人ID")
-	private String userId;
+	private String commenter;
 	
-	@ApiModelProperty("头像")
+	@ApiModelProperty("评论人的头像")
 	private String photo;
 	
-	@ApiModelProperty("昵称")
+	@ApiModelProperty("评论人的昵称")
 	private String name;
 
 	@ApiModelProperty("点赞量")
 	private Long likeCount;
-	
-	@ApiModelProperty("是否点赞")
-	private String isLiked;
 	
 	@ApiModelProperty("评论时间")
 	private String time;
@@ -54,6 +51,12 @@ public class NoteCommentDto implements Serializable {
 	
 	@ApiModelProperty("父评论id")
 	private Long applyId;
+	
+	@ApiModelProperty("父评论人id")
+	private String applyUser;
+	
+	@ApiModelProperty("被艾特者昵称")
+	private String applier;
 	
 	@ApiModelProperty("子集")
 	private List<NoteCommentDto> children;

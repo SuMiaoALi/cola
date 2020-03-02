@@ -27,7 +27,7 @@ public class NoteQueryVo extends BaseVo{
 	private String key;
 	
 	@ApiModelProperty("标签ID")
-	private String tagId = "";
+	private String tagId;
 	
 	@ApiModelProperty(value = "用户ID", hidden = true)
 	private String userId;
@@ -37,5 +37,9 @@ public class NoteQueryVo extends BaseVo{
 
 	@ApiModelProperty(value = "0待审核 1审核通过 2审核不通过", hidden = true)
 	private String status;
+	
+	@ApiModelProperty(value = "收藏者", hidden = true)
+	private String collector;
+	
 	
 }

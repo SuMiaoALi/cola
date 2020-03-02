@@ -8,6 +8,7 @@ import com.baoyun.ins.utils.pagehelper.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @Description: 帖子详情实体
@@ -17,6 +18,7 @@ import lombok.Data;
 
 @ApiModel("帖子详情实体")
 @Data
+@Accessors(chain = true)
 public class NoteDetailDto implements Serializable {
 	/**
 	 * 
@@ -24,7 +26,7 @@ public class NoteDetailDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@ApiModelProperty("id")
-	private String id;
+	private Integer id;
 	
 	@ApiModelProperty("标题")
 	private String title;
@@ -32,8 +34,8 @@ public class NoteDetailDto implements Serializable {
 	@ApiModelProperty("内容")
 	private String content;
 	
-	@ApiModelProperty("封面")
-	private String cover;
+//	@ApiModelProperty("封面")
+//	private String cover;
 	
 	@ApiModelProperty("头像")
 	private String photo;
@@ -43,6 +45,9 @@ public class NoteDetailDto implements Serializable {
 	
 	@ApiModelProperty("作者")
 	private String author;
+	
+	@ApiModelProperty("签名")
+	private String description;
 	
 	@ApiModelProperty("评论量")
 	private Long commentCount;
@@ -77,21 +82,16 @@ public class NoteDetailDto implements Serializable {
 	@ApiModelProperty("是否收藏：0 否，1是")
 	private String isMine;
 	
-	@ApiModelProperty("评论")
-	private Page<NoteCommentDto> comments;
-	
-	@ApiModelProperty("评论列表")
-	private List<NoteCommentDto> commentList;
+//	@ApiModelProperty("评论")
+//	private Page<NoteCommentDto> comments;
+//	
+//	@ApiModelProperty("评论列表")
+//	private List<NoteCommentDto> commentList;
 	
 	@ApiModelProperty("推荐")
 	private List<NoteQueryDto> recommend;
 	
 	@ApiModelProperty("帖子图片")
-	private List<NoteMediaDto> media;
+	private List<String> imgs;
 	
-	@ApiModelProperty("帖子图片")
-	private String imgs;
-
-	@ApiModelProperty("类型")
-	private String type;
 }

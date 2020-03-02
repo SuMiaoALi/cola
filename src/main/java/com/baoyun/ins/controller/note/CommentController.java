@@ -53,7 +53,7 @@ public class CommentController {
 	}
 	
 	@ApiOperation("保存评论")
-	@PostMapping
+	@PostMapping("/save")
 	@Notify(type = "C", method = "A")
 	public Msg<?> save(@Valid @RequestBody CommentVo commentVo){
 		return commentService.save(commentVo);

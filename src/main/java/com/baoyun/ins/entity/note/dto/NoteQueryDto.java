@@ -23,7 +23,7 @@ public class NoteQueryDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@ApiModelProperty("id")
-	private String id;
+	private Integer id;
 	
 	@ApiModelProperty("标题")
 	private String title;
@@ -43,9 +43,6 @@ public class NoteQueryDto implements Serializable {
 	@ApiModelProperty("用户ID")
 	private String author;
 	
-	@ApiModelProperty("评论数")
-	private Long commentCount;
-	
 	@ApiModelProperty("点赞数")
 	private Long likeCount;
 	
@@ -56,7 +53,7 @@ public class NoteQueryDto implements Serializable {
 	private Long viewCount;
 	
 	@ApiModelProperty("是否已删除")
-	private String isDelete;
+	private String delete;
 	
 	@ApiModelProperty("是否点赞")
 	private String isLiked;
