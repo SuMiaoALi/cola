@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.baoyun.ins.entity.bi.vo.NoteTagVo;
 import com.baoyun.ins.entity.note.dto.NoteDetailDto;
 import com.baoyun.ins.entity.note.dto.NoteOperateDto;
 import com.baoyun.ins.entity.note.dto.NoteQueryDto;
@@ -42,6 +41,7 @@ public interface NoteMapper {
 		"<when test='vo.tagId == 0'> and n.is_hot = 1 </when>",
 		" <when test='vo.tagId !=null and vo.tagId != \"\" and vo.tagId != 0'> and t.note_id = n.id </when>",
 		" <when test='vo.key != null'> and n.title like '%${vo.key}%' </when>",
+		" <when test='vo.info != null and vo.info != \"\"'> and n.is_info = #{vo.info} </when>",
 		" <when test='vo.author != null and vo.author != \"\"'> and n.author = #{vo.author} </when>",
 //		" <when test='vo.collector != null and vo.collector != \"\"'> and lnc.collector = #{vo.collector} </when>",
 		"ORDER BY n.is_hot desc, n.create_time desc",
@@ -80,7 +80,7 @@ public interface NoteMapper {
 	 */
 	@Select({
 		"<script>",
-		"SELECT n.id, n.title, IFNULL(n.comment_count, 0) as commentCount, IFNULL(n.like_count, 0) as likeCount, n.author,",
+		"SELECT n.id, n.title, IFNULL(n.comment_count, 0) as commentCount, IFNULL(n.like_count, 0) as likeCount, n.author, n.cover, ",
 		// 是否是自己的帖子
 		"(select case when count(1) > 0 then 1 else 0 end from t_note where id = #{id} and author = #{userId}) as isMine, IFNULL(n.collection_count, 0) as collectionCount,",
 		"IFNULL(view_count, 0) as viewCount, p.`name`, p.photo, p.description, DATE_FORMAT(FROM_UNIXTIME(create_time), '%Y-%m-%d   %H:%i') as time, ",
@@ -182,8 +182,8 @@ public interface NoteMapper {
 	 * @param id
 	 * @param tag
 	 */
-	@Insert("insert into t_note_tag(note_id, tag_id) values (#{noteId}, #{id} )")
-	void addTag(NoteTagVo tag);
+	@Insert("insert into t_note_tag(note_id, tag_id) values (#{0}, #{1} )")
+	void addTag(Integer noteId, Integer tagId);
 	
 	/**
 	 * 清除帖子下的图片
@@ -255,6 +255,16 @@ public interface NoteMapper {
 		"</script>"
 		})
 	List<NoteQueryDto> myLike(String userId);
+	
+	/**
+	 * @Description: 修改帖子封面
+	 * @Author cola
+	 * @Data: 2020年3月3日
+	 * @param noteId
+	 * @param cover
+	 */
+	@Update("update t_note set cover = #{1} where id = #{0} ")
+	void updateCover(Integer noteId, String cover);
 	
 	
 }

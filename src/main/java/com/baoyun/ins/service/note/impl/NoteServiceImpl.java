@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baoyun.ins.entity.BaseVo;
 import com.baoyun.ins.entity.note.dto.NoteCommentDto;
@@ -21,6 +22,7 @@ import com.baoyun.ins.service.note.NoteService;
 import com.baoyun.ins.utils.json.Msg;
 import com.baoyun.ins.utils.pagehelper.Page;
 import com.baoyun.ins.utils.spring.SpringContextUtil;
+import com.baoyun.ins.utils.uoload.FileUploadUtil;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -42,25 +44,38 @@ public class NoteServiceImpl implements NoteService {
 	 */
 	@Override
 	@Transactional
-	public Msg<?> save(NoteVo noteVo) {
+	public Msg<?> save(List<MultipartFile> file, NoteVo noteVo) {
 		// TODO Auto-generated method stub
 		Msg<Object> msg = new Msg<>();
 		String userId = SpringContextUtil.getUserId();
-//		为了测试演示方便，默认为通过
+		// 为了测试演示方便，默认为通过
 		noteVo.setAuthor(userId).setStatus("1").setDelete("0");
-		if (noteVo.getImages().size() > 0) {
-			noteVo.setCover(noteVo.getImages().get(0));
-		}
 		noteMapper.save(noteVo);
 		noteMapper.saveContent(noteVo);
 		msg.setData(noteVo.getId());
 		// 添加图片
-		for (String img : noteVo.getImages()) {
-			noteMapper.addImg(noteVo.getId(), img);
+		if (file.size() > 0) {
+			// 只有一张图片
+			if (file.size() == 1) {
+				String newName = FileUploadUtil.uploadImage(file.get(0));
+				noteMapper.updateCover(noteVo.getId(), newName);
+				noteMapper.addImg(noteVo.getId(), newName);
+			}
+			else {
+				for (int i = 0; i < file.size(); i++) {
+					// 先存第一张图片,设置封面
+					if (i == 0) {
+						String firName = FileUploadUtil.uploadImage(file.get(i));
+						noteMapper.updateCover(noteVo.getId(), firName);
+						noteMapper.addImg(noteVo.getId(), firName);
+						continue;
+					}
+					noteMapper.addImg(noteVo.getId(), FileUploadUtil.uploadImage(file.get(i)));
+				}
+			}
 		}
 		// 添加标签
-		noteVo.getTag().setNoteId(noteVo.getId());
-		noteMapper.addTag(noteVo.getTag());
+		noteMapper.addTag(noteVo.getId(), noteVo.getTagId());
 		return msg;
 	}
 
@@ -134,6 +149,7 @@ public class NoteServiceImpl implements NoteService {
 //		Page<NoteCommentDto> pageInfo = new Page<NoteCommentDto>(list, 1, 4);
 //		ndd.setComments(pageInfo);
 		// 详情每加载一次，帖子的浏览数增加
+		System.out.println(ndd);
 		return new Msg<>(ndd);
 	}
 

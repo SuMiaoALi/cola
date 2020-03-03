@@ -25,6 +25,7 @@ spring:
             max-idle: 10
             min-idle: 0
         timeout: 15000
+rootPath: C:\\Users\\Ali\\Desktop\\statics
 server:
     port: 8888
 pagehelper:

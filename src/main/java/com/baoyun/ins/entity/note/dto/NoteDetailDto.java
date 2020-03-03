@@ -3,8 +3,6 @@ package com.baoyun.ins.entity.note.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import com.baoyun.ins.utils.pagehelper.Page;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,8 +32,8 @@ public class NoteDetailDto implements Serializable {
 	@ApiModelProperty("内容")
 	private String content;
 	
-//	@ApiModelProperty("封面")
-//	private String cover;
+	@ApiModelProperty("封面")
+	private String cover;
 	
 	@ApiModelProperty("头像")
 	private String photo;

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.baoyun.ins.utils.ali.SmsUtil;
+import com.baoyun.ins.utils.uoload.FileUploadUtil;
 
 /**
  * @Description: 工具类注入配置
@@ -18,6 +19,11 @@ public class UtilConfig {
 	@Bean
 	public SmsUtil getSmsutil() {
 		return new SmsUtil();
+	}
+	
+	@Bean
+	public FileUploadUtil getFileUploadUtil() {
+		return new FileUploadUtil();
 	}
 
 }

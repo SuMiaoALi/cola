@@ -1,14 +1,10 @@
 package com.baoyun.ins.entity.note.vo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.baoyun.ins.entity.bi.vo.NoteTagVo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -48,7 +44,7 @@ public class NoteVo implements Serializable {
 	private String description;
 	
 	@ApiModelProperty("帖子标签")
-	private NoteTagVo tag;
+	private Integer tagId;
 	
 	@ApiModelProperty(value = "作者id", hidden = true)
 	private String author;
@@ -61,11 +57,5 @@ public class NoteVo implements Serializable {
 	
 	@ApiModelProperty(value = "热帖")
 	private String hot;
-	
-	@ApiModelProperty("图片")
-	private MultipartFile file;
-	
-	@ApiModelProperty("图片")
-	private List<String> images;
 	
 }

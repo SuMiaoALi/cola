@@ -1,13 +1,5 @@
 package com.baoyun.ins.service.profile.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.UUID;
-
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +11,7 @@ import com.baoyun.ins.service.profile.ProfileService;
 import com.baoyun.ins.utils.json.Msg;
 import com.baoyun.ins.utils.spring.SpringContextUtil;
 import com.baoyun.ins.utils.string.StringUtil;
+import com.baoyun.ins.utils.uoload.FileUploadUtil;
 
 /**
  * @Description: 个人中心接口
@@ -31,7 +24,7 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Autowired
 	private ProfileMapper profileMapper;
-
+	
 	/**
 	 *获取个人信息
 	 */
@@ -68,25 +61,8 @@ public class ProfileServiceImpl implements ProfileService {
 		if (file.isEmpty()) {
 			return new Msg<>();
 		}
-		System.out.println(file);
-		String name = file.getOriginalFilename();
-		System.out.println("原名字：" + name);
-		String newName = UUID.randomUUID().toString() + name.substring(name.lastIndexOf("."));
-		System.out.println("新名字：" + newName);
-		// 1.创建源
-		String statics = "C:\\Users\\Ali\\Desktop\\statics\\";
-		File dir = new File(statics);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-		File _file = new File(dir, newName);
-		try {
-			file.transferTo(_file);
-		} catch (IllegalStateException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		profileMapper.photo(SpringContextUtil.getUserId(), statics + newName);
+		String newName = FileUploadUtil.uploadImage(file);
+		profileMapper.photo(SpringContextUtil.getUserId(), newName);
 		return new Msg<>();
 	}
 

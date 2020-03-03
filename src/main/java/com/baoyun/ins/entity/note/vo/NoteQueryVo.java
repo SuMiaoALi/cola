@@ -41,5 +41,7 @@ public class NoteQueryVo extends BaseVo{
 	@ApiModelProperty(value = "收藏者", hidden = true)
 	private String collector;
 	
+	@ApiModelProperty("是否是资讯内容")
+	private String info;
 	
 }

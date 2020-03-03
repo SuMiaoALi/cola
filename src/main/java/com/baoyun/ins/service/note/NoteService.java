@@ -1,5 +1,9 @@
 package com.baoyun.ins.service.note;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.baoyun.ins.entity.BaseVo;
 import com.baoyun.ins.entity.note.dto.NoteDetailDto;
 import com.baoyun.ins.entity.note.dto.NoteQueryDto;
@@ -16,7 +20,7 @@ public interface NoteService {
 	 * @param noteVo
 	 * @return
 	 */
-	Msg<?> save(NoteVo noteVo);
+	Msg<?> save(List<MultipartFile> file, NoteVo noteVo);
 	
 	/**
 	 * 查询笔记
