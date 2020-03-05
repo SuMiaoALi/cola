@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.utils.StringUtils;
 import com.baoyun.ins.config.constant.C;
 import com.baoyun.ins.entity.auth.User;
 import com.baoyun.ins.entity.auth.dto.LoginDto;
@@ -324,7 +323,12 @@ public class LoginServiceImpl implements LoginService {
 							msg.setMessage("验证码错误");
 							return msg;
 						}
-					} 
+					} else {
+						// 没收到验证码
+						msg.setCode("30002");
+						msg.setMessage("请输入正确的验证码");
+						return msg;
+					}
 				} catch (Exception e) {
 					msg.setCode(GlobalReturnCode.REDIS_ERROR);
 					msg.setMessage("Redis服务器连接不上了mmp，我回头再教训它，请重试一下噢");

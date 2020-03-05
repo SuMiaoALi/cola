@@ -27,17 +27,17 @@ public class CheckLoginConfig implements WebMvcConfigurer {
   public void addInterceptors(InterceptorRegistry registry) {
     // addPathPatterns("/**") 表示拦截所有的请求，
     // excludePathPatterns("/login", "/reg") 表示除了登陆与注册之外，因为登陆注册不需要登陆也可以访问
-    registry.addInterceptor(checkLoginInterceptor)
-    	.addPathPatterns("/note/mine/**", "/note/save", "/note/like/**", "/note/unlike/**", "/note/collect/**", "/note/uncollect/**", 
-    					 "/comment/save", "/keyword/save/**", "/keyword/del/**", "/profile/get/self", "/profile/update", "/profile/photo");
+//    registry.addInterceptor(checkLoginInterceptor)
+//    	.addPathPatterns("/note/save",
+//    					 "/comment/save", "/keyword/save/**", "/keyword/del/**", "/profile/get/self", "/profile/update", "/profile/photo")
 //    	.excludePathPatterns(
-//    			"/login",
-//    			"/login/**",
-//    			"/wechat",
-//    			"/message/**",
+////    			"/login",
+////    			"/login/**",
+////    			"/wechat",
+////    			"/message/**",
 //    			"/swagger-ui.html",
 //    			"/swagger-resources/**",
-//    			"/webjars/**",
+////    			"/webjars/**",
 //    			"/doc.html"
 //	);
   }

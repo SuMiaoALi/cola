@@ -30,6 +30,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
 	
 	/**
 	 * 操作前先判断是否登录，未登录提示未登录
+	 * SpringContextUtil.getUserId() 可以直接从accessToken获取，也可以通过拦截器加入的请求属性current_user获取
 	 */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	if (StringUtil.isNullOrEmpty(request.getHeader("accessToken"))) {

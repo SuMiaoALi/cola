@@ -12,7 +12,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.baoyun.ins.utils.string.StringUtil;
-import com.baoyun.ins.utils.token.PasswordUtil;
 import com.baoyun.ins.utils.token.TokenUtil;
 
 import io.jsonwebtoken.Claims;
@@ -60,12 +59,14 @@ public class SpringContextUtil implements ApplicationContextAware {
     public static String getUserId() {
     	try {
 	    	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	    	if(request.getAttribute("current_user") != null) {
-	    		return request.getAttribute("current_user").toString();
-	    	}
+	    	// 1.直接从accessToken解析
 	    	if (StringUtil.isNotNullOrEmpty(request.getHeader("accessToken"))) {
 	    		Claims claims = TokenUtil.get(request.getHeader("accessToken"));
 	    		return claims.getSubject();
+	    	}
+	    	// 2.通过拦截器拦截的accessToken获取request.setAttribute("current_user")
+	    	if(request.getAttribute("current_user") != null) {
+	    		return request.getAttribute("current_user").toString();
 	    	}
     	}catch(Exception e) {
     		
