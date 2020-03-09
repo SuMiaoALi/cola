@@ -83,6 +83,12 @@ public class NoteController {
 		return noteService.myLike(userId, baseVo);
 	}
 	
+	@ApiOperation("查询屏蔽帖子")
+	@GetMapping("/mine/shield/{userId}")
+	public Msg<?> myShield(@PathVariable String userId, BaseVo baseVo){
+		return noteService.myShield(userId, baseVo);
+	}
+	
 	@ApiOperation("保存笔记")
 	@PostMapping("/save")
 	public Msg<?> save(List<MultipartFile> file, NoteVo noteVo){
@@ -130,6 +136,18 @@ public class NoteController {
 	@GetMapping("/comment")
 	public Msg<?> comment(CommentQueryVo commentVo) {
 		return noteService.comment(commentVo);
+	}
+	
+	@ApiOperation("屏蔽帖子")
+	@PostMapping("/shield/{noteId}")
+	public Msg<?> shield(@PathVariable Long noteId) {
+		return noteService.shield(noteId);
+	}
+	
+	@ApiOperation("取消屏蔽帖子")
+	@PostMapping("/unshield/{noteId}")
+	public Msg<?> unshield(@PathVariable Long noteId) {
+		return noteService.unshield(noteId);
 	}
 	
 }

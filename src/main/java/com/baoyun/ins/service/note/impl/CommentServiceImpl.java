@@ -31,8 +31,7 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	public Msg<?> save(CommentVo commentVo) {
 		// TODO Auto-generated method stub
-		String userId = "addcd2394d354ebfbd8da62145d25df7";
-//		String userId = SpringContextUtil.getUserId();
+		String userId = SpringContextUtil.getUserId();
 		commentVo.setCommenter(userId);
 		commentMapper.save(commentVo);
 		return new Msg<>(commentVo.getId());
@@ -72,6 +71,16 @@ public class CommentServiceImpl implements CommentService {
 		List<NoteCommentApplyDto> _list = commentMapper.apply(noteCommentQueryVo);
 		Page<NoteCommentApplyDto> _pageInfo = new Page<NoteCommentApplyDto>(_list,noteCommentQueryVo.getStart(), noteCommentQueryVo.getPageSize());
 		return new Msg<Page<NoteCommentApplyDto>>(_pageInfo); 
+	}
+
+	/**
+	 *删除评论
+	 */
+	@Override
+	public Msg<?> delete(Long id) {
+		// TODO Auto-generated method stub
+		commentMapper.delete(SpringContextUtil.getUserId(), id);
+		return new Msg<>();
 	}
 
 

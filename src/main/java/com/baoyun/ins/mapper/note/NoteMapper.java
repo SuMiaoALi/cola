@@ -32,18 +32,18 @@ public interface NoteMapper {
 	@Select({
 		"<script>",
 		"SELECT n.id, n.title, n.cover, ifnull(n.comment_count, 0) as commentCount, ifnull(n.like_count, 0) as likeCount, n.author, IFNULL(n.collection_count, 0) collectionCount,",
-		"ifnull(n.view_count, 0) as viewCount, c.content, ",
+		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, c.content, ",
 		"p.`name`, p.photo, (select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{vo.userId} and note_id = n.id) as isLiked, ",
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{vo.userId} and note_id = n.id) as isCollected ",
 		"FROM t_note n, t_profile p, t_note_content c ",
 		"<when test = 'vo.tagId != null and vo.tagId != \"\" and vo.tagId != 0'> ,(SELECT note_id FROM t_note_tag WHERE tag_id = #{vo.tagId} ) t </when>",
 		"WHERE n.author = p.user_id and n.is_delete = 0 and n.status = 1 and n.id = c.note_id ",
 		"<when test='vo.tagId == 0'> and n.is_hot = 1 </when>",
-		" <when test='vo.tagId !=null and vo.tagId != \"\" and vo.tagId != 0'> and t.note_id = n.id </when>",
-		" <when test='vo.key != null'> and n.title like '%${vo.key}%' </when>",
-		" <when test='vo.info != null and vo.info != \"\"'> and n.is_info = #{vo.info} </when>",
-		" <when test='vo.author != null and vo.author != \"\"'> and n.author = #{vo.author} </when>",
-//		" <when test='vo.collector != null and vo.collector != \"\"'> and lnc.collector = #{vo.collector} </when>",
+		"<when test='vo.tagId !=null and vo.tagId != \"\" and vo.tagId != 0'> and t.note_id = n.id </when>",
+		"<when test='vo.key != null'> and n.title like '%${vo.key}%' </when>",
+		"<when test='vo.info != null and vo.info != \"\"'> and n.is_info = #{vo.info} </when>",
+		"<when test='vo.author != null and vo.author != \"\"'> and n.author = #{vo.author} </when>",
+		"<when test='vo.userId != null and vo.userId != \"\"'> and n.id not in (select note_id from t_note_shield where user_id = #{vo.userId}) </when>",
 		"ORDER BY n.is_hot desc, n.create_time desc",
 		"</script>"
 		})
@@ -59,7 +59,8 @@ public interface NoteMapper {
 	 */
 	@Select({
 		"<script>",
-		"SELECT n.id, n.title, n.cover, ifnull(n.like_count, 0) likeCount, IFNULL(n.collection_count, 0) collectionCount, ifnull(n.view_count, 0) viewCount, n.author,",
+		"SELECT n.id, n.title, n.cover, ifnull(n.like_count, 0) likeCount, IFNULL(n.collection_count, 0) collectionCount, ",
+		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, n.author,",
 		// 当前用户是否点赞
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{userId} and note_id = n.id) as isLiked,",
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{userId} and note_id = n.id) as isCollected,",
@@ -82,8 +83,9 @@ public interface NoteMapper {
 		"<script>",
 		"SELECT n.id, n.title, IFNULL(n.comment_count, 0) as commentCount, IFNULL(n.like_count, 0) as likeCount, n.author, n.cover, ",
 		// 是否是自己的帖子
-		"(select case when count(1) > 0 then 1 else 0 end from t_note where id = #{id} and author = #{userId}) as isMine, IFNULL(n.collection_count, 0) as collectionCount,",
-		"IFNULL(view_count, 0) as viewCount, p.`name`, p.photo, p.description, DATE_FORMAT(FROM_UNIXTIME(create_time), '%Y-%m-%d   %H:%i') as time, ",
+		"(select case when count(1) > 0 then 1 else 0 end from t_note where id = #{id} and author = #{userId}) as isMine, IFNULL(n.collection_count, 0) as collectionCount, ",
+		"p.`name`, p.photo, p.description, DATE_FORMAT(FROM_UNIXTIME(create_time), '%Y-%m-%d   %H:%i') as time, ",
+		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, ",
 		"(select content from t_note_content where note_id = n.id) as content, ",
 		"(select case when count(1) > 0 then 1 else 0 end from t_fans where fans_id = #{userId} and is_delete = 0 and user_id = n.author) as isFollow,",
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{userId} and note_id = n.id) as isLiked,",
@@ -167,8 +169,8 @@ public interface NoteMapper {
 	 * @param userId
 	 * @param id
 	 */
-	@Delete("update t_note set is_delete = 1 where author = #{userId} and id = #{id}")
-	void delete(@Param("userId")String userId, @Param("id")Long id);
+	@Delete("update t_note set is_delete = 1 where author = #{0} and id = #{1}")
+	void delete(String userId, Long id);
 
 	/**
 	 * 删除所有标签
@@ -257,6 +259,25 @@ public interface NoteMapper {
 	List<NoteQueryDto> myLike(String userId);
 	
 	/**
+	 * @Description: 查询我屏蔽的
+	 * @Author cola
+	 * @Data: 2020年3月6日
+	 * @param userId
+	 * @return
+	 */
+	@Select({"<script>",
+		"SELECT n.id, n.title, n.cover, ifnull(n.comment_count, 0) as commentCount, ifnull(n.like_count, 0) as likeCount, n.author, IFNULL(n.collection_count, 0) collectionCount,",
+		"ifnull(n.view_count, 0) as viewCount, c.content, ",
+		"p.`name`, p.photo, (select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{0} and note_id = n.id) as isLiked, ",
+		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{0} and note_id = n.id) as isCollected ",
+		"FROM t_note n, t_profile p, t_note_content c, t_note_shield ns ",
+		"WHERE n.author = p.user_id and n.is_delete = 0 and n.status = 1 and n.id = c.note_id and n.id = ns.note_id and ns.user_id = #{0} ",
+		"ORDER BY n.is_hot desc, n.create_time desc",
+		"</script>"
+		})
+	List<NoteQueryDto> myShield(String userId);
+	
+	/**
 	 * @Description: 修改帖子封面
 	 * @Author cola
 	 * @Data: 2020年3月3日
@@ -265,6 +286,25 @@ public interface NoteMapper {
 	 */
 	@Update("update t_note set cover = #{1} where id = #{0} ")
 	void updateCover(Integer noteId, String cover);
-	
-	
+
+	/**
+	 * @Description: 屏蔽帖子
+	 * @Author cola
+	 * @Data: 2020年3月6日
+	 * @param noteId
+	 * @param userId
+	 */
+	@Insert("insert into t_note_shield(note_id, user_id) values (#{0}, #{1}) ")
+	void shield(Long noteId, String userId);
+
+	/**
+	 * @Description: 取消屏蔽
+	 * @Author cola
+	 * @Data: 2020年3月7日
+	 * @param userId
+	 * @param noteId
+	 */
+	@Delete("delete from t_note_shield where user_id = #{0} and note_id = #{1} ")
+	void unshield(String userId, Long noteId);
+
 }

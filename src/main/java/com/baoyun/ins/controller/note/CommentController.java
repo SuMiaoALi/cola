@@ -3,6 +3,7 @@ package com.baoyun.ins.controller.note;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,32 +43,39 @@ public class CommentController {
 	
 	@ApiOperation("查询评论")
 	@GetMapping
-	public Msg<Page<NoteCommentDto>> list(NoteCommentQueryVo noteCommentQueryVo){
+	public Msg<Page<NoteCommentDto>> list (NoteCommentQueryVo noteCommentQueryVo){
 		return commentService.list(noteCommentQueryVo);
 	}
 	
 	@ApiOperation("查询评论")
 	@GetMapping("/applies")
-	public Msg<Page<NoteCommentApplyDto>> applies(NoteCommentQueryVo noteCommentQueryVo){
+	public Msg<Page<NoteCommentApplyDto>> applies (NoteCommentQueryVo noteCommentQueryVo) {
 		return commentService.applies(noteCommentQueryVo);
 	}
 	
 	@ApiOperation("保存评论")
 	@PostMapping("/save")
 	@Notify(type = "C", method = "A")
-	public Msg<?> save(@Valid @RequestBody CommentVo commentVo){
+	public Msg<?> save (@Valid @RequestBody CommentVo commentVo) {
 		return commentService.save(commentVo);
 	}
 	
 	@ApiOperation("点赞")
 	@PutMapping("/like/{id}")
-	public Msg<?> like(@PathVariable long id){
+	public Msg<?> like (@PathVariable Long id) {
 		return noteService.operate(id, 7);
 	}
 	
 	@ApiOperation("取消点赞")
 	@PutMapping("/unlike/{id}")
-	public Msg<?> unlike(@PathVariable long id){
+	public Msg<?> unlike (@PathVariable Long id) {
 		return noteService.operate(id, 8);
 	}
+	
+	@ApiOperation("删除评论")
+	@DeleteMapping("/delete/{id}")
+	public Msg<?> delete (@PathVariable Long id) {
+		return commentService.delete(id);
+	}
+	
 }

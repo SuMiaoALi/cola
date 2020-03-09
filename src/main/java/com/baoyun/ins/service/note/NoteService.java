@@ -88,4 +88,32 @@ public interface NoteService {
 	 */
 	Msg<?> myLike(String userId, BaseVo baseVo);
 
+	/**
+	 * @Description: 屏蔽帖子
+	 * @Author cola
+	 * @Data: 2020年3月6日
+	 * @param noteId
+	 * @return
+	 */
+	Msg<?> shield(Long noteId);
+
+	/**
+	 * @Description: 查询我屏蔽的
+	 * @Author cola
+	 * @Data: 2020年3月6日
+	 * @param userId
+	 * @param baseVo
+	 * @return
+	 */
+	Msg<?> myShield(String userId, BaseVo baseVo);
+
+	/**
+	 * @Description: 取消屏蔽
+	 * @Author cola
+	 * @Data: 2020年3月7日
+	 * @param noteId
+	 * @return
+	 */
+	Msg<?> unshield(Long noteId);
+
 }

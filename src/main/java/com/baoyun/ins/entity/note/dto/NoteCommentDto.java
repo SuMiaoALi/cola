@@ -26,7 +26,7 @@ public class NoteCommentDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@ApiModelProperty("id")
-	private Long id;
+	private long id;
 	
 	@ApiModelProperty("内容")
 	private String content;
@@ -43,8 +43,14 @@ public class NoteCommentDto implements Serializable {
 	@ApiModelProperty("点赞量")
 	private Long likeCount;
 	
+	@ApiModelProperty("评论的回复数量")
+	private Long applyCount;
+	
 	@ApiModelProperty("评论时间")
 	private String time;
+	
+	@ApiModelProperty("是否是自己评论的")
+	private String isMine;
 	
 	@ApiModelProperty("回复")
 	private Page<NoteCommentApplyDto> applies;

@@ -29,4 +29,13 @@ public interface CommentService {
 	 * @return
 	 */
 	Msg<Page<NoteCommentApplyDto>> applies(NoteCommentQueryVo noteCommentQueryVo);
+
+	/**
+	 * @Description: 删除评论
+	 * @Author cola
+	 * @Data: 2020年3月8日
+	 * @param id
+	 * @return
+	 */
+	Msg<?> delete(Long id);
 }

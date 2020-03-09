@@ -60,8 +60,7 @@ public class NoteServiceImpl implements NoteService {
 				String newName = FileUploadUtil.uploadImage(file.get(0));
 				noteMapper.updateCover(noteVo.getId(), newName);
 				noteMapper.addImg(noteVo.getId(), newName);
-			}
-			else {
+			} else {
 				for (int i = 0; i < file.size(); i++) {
 					// 先存第一张图片,设置封面
 					if (i == 0) {
@@ -84,8 +83,7 @@ public class NoteServiceImpl implements NoteService {
 	 */
 	@Override
 	public Msg<Page<NoteQueryDto>> list(NoteQueryVo noteQueryVo) {
-		String userId = SpringContextUtil.getUserId();
-		noteQueryVo.setUserId(userId);
+		noteQueryVo.setUserId(SpringContextUtil.getUserId());
 		PageHelper.startPage(noteQueryVo.getStart(), noteQueryVo.getPageSize());
 		List<NoteQueryDto> list = noteMapper.list(noteQueryVo);
 		Page<NoteQueryDto> pageInfo = new Page<>(list);
@@ -100,7 +98,7 @@ public class NoteServiceImpl implements NoteService {
 		// TODO Auto-generated method stub
 		Msg<?> msg = new Msg<>();
 		String userId = SpringContextUtil.getUserId();
-		NoteOperateDto nod = noteMapper.operate(userId, id, type);
+		NoteOperateDto nod = noteMapper.operate(userId == null ? "" : userId, id, type);
 		msg.setCode(nod.getRs());
 		return msg;
 	}
@@ -112,7 +110,6 @@ public class NoteServiceImpl implements NoteService {
 	public Msg<NoteDetailDto> get(Long id) {
 		// TODO Auto-generated method stub
 		String userId = SpringContextUtil.getUserId();
-//		String userId = "addcd2394d354ebfbd8da62145d25df7";
 		NoteDetailDto ndd = noteMapper.get(id, userId);
 		if (ndd != null) {
 			// 图片，标签
@@ -122,6 +119,7 @@ public class NoteServiceImpl implements NoteService {
 			ndd.setRecommend(noteMapper.recommend(id, userId));
 			ndd.setViewCount(ndd.getViewCount() + 1);
 		}
+		this.operate(id, 5);
 		// 查询日记评论
 //		NoteCommentQueryVo noteCommentQueryVo = new NoteCommentQueryVo();
 //		noteCommentQueryVo.setUserId(userId);
@@ -149,7 +147,6 @@ public class NoteServiceImpl implements NoteService {
 //		Page<NoteCommentDto> pageInfo = new Page<NoteCommentDto>(list, 1, 4);
 //		ndd.setComments(pageInfo);
 		// 详情每加载一次，帖子的浏览数增加
-		System.out.println(ndd);
 		return new Msg<>(ndd);
 	}
 
@@ -159,9 +156,7 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public Msg<?> delete(Long id) {
 		// TODO Auto-generated method stub
-//		String userId = SpringContextUtil.getUserId();
-		String userId = "addcd2394d354ebfbd8da62145d25df7";
-		noteMapper.delete(userId, id);
+		noteMapper.delete(SpringContextUtil.getUserId(), id);
 		return new Msg<>();
 	}
 
@@ -175,20 +170,23 @@ public class NoteServiceImpl implements NoteService {
 		Long noteId = commentVo.getId();
 		// 只查询评论
 		PageHelper.startPage(commentVo.getStart(), commentVo.getPageSize());
-		List<NoteCommentDto> parentList = commentMapper.list1(noteId);
+		List<NoteCommentDto> parentList = commentMapper.list1(SpringContextUtil.getUserId(), noteId);
 		// 只查询回复
 		List<NoteCommentDto> childrenList = commentMapper.list2(noteId);
-
+		
 		for (NoteCommentDto parent : parentList) {
+			System.out.println("父id" + parent.getId());
+			List<NoteCommentDto> list = new ArrayList<>();
 			for (NoteCommentDto children : childrenList) {
 				if (children.getApplyId() == parent.getId()) {
 					// 加一条子集就退出本轮
-					List<NoteCommentDto> list = new ArrayList<NoteCommentDto>();
+					children.setChildren(new ArrayList<>());
 					list.add(children);
 					// 默认丢一条
-//					break;
+					break;
 				}
 			}
+			parent.setChildren(list);
 		}
 		Page<NoteCommentDto> pageList = new Page<>(parentList);
 		return new Msg<>(pageList);
@@ -222,6 +220,9 @@ public class NoteServiceImpl implements NoteService {
 		return new Msg<>(pageInfo);
 	}
 
+	/**
+	 * 我点攒的
+	 */
 	@Override
 	public Msg<?> myLike(String userId, BaseVo baseVo) {
 		// TODO Auto-generated method stub
@@ -233,6 +234,43 @@ public class NoteServiceImpl implements NoteService {
 		List<NoteQueryDto> list = noteMapper.myLike(userId);
 		Page<NoteQueryDto> pageInfo = new Page<>(list);
 		return new Msg<>(pageInfo);
+	}
+
+	/**
+	 * 我屏蔽的
+	 */
+	@Override
+	public Msg<?> myShield(String userId, BaseVo baseVo) {
+		// TODO Auto-generated method stub
+		// 当前用户
+		if ("self".equals(userId)) {
+			userId = SpringContextUtil.getUserId();
+		}
+		PageHelper.startPage(baseVo.getStart(), baseVo.getPageSize());
+		List<NoteQueryDto> list = noteMapper.myShield(userId);
+		Page<NoteQueryDto> pageInfo = new Page<>(list);
+		return new Msg<>(pageInfo);
+	}
+
+	/**
+	 * 屏蔽帖子
+	 */
+	@Override
+	public Msg<?> shield(Long noteId) {
+		// TODO Auto-generated method stub
+		noteMapper.shield(noteId, SpringContextUtil.getUserId());
+		return new Msg<>();
+	}
+
+	
+	/**
+	 *取消屏蔽
+	 */
+	@Override
+	public Msg<?> unshield(Long noteId) {
+		// TODO Auto-generated method stub
+		noteMapper.unshield(SpringContextUtil.getUserId(), noteId);
+		return new Msg<>();
 	}
 
 }

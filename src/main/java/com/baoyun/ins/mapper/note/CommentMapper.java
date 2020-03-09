@@ -2,6 +2,7 @@ package com.baoyun.ins.mapper.note;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -80,15 +81,16 @@ public interface CommentMapper {
 	 * @return
 	 */
 	@Select({
-		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%m-%d') as time, " + 
+		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d') as time, " + 
 		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier " + 
-		",(select count(*) from t_comment where apply_id = a.id ) as applyCount " +
+		", (select count(*) from t_comment where apply_id = a.id ) as applyCount, " +
+		"(select case when commenter = #{0} then 1 else 0 end) as isMine " +
 		"from t_comment a " + 
-		"left join t_profile c on c.user_id = a.commenter " + 
+		"left join t_profile c on c.user_id = a.commenter " + 		// 评论者
 		"left join t_profile cp on cp.user_id = a.apply_user " +  // cp被回复者
-		"where a.note_id = #{0} and a.apply_id = 0 order by a.comment_time desc "
+		"where a.note_id = #{1} and a.apply_id = 0 order by a.comment_time desc "
 		})
-	List<NoteCommentDto> list1(Long id);
+	List<NoteCommentDto> list1(String userId, Long id);
 
 	/**
 	 * @Description: 查询所有回复
@@ -98,7 +100,7 @@ public interface CommentMapper {
 	 * @return
 	 */
 	@Select({
-		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%m-%d') as time, " + 
+		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d') as time, " + 
 		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier " + 
 		"from t_comment a " + 
 		"left join t_profile c on c.user_id = a.commenter " + 
@@ -106,4 +108,14 @@ public interface CommentMapper {
 		"where a.note_id = #{0} and a.apply_id != 0 order by a.comment_time desc "
 		})
 	List<NoteCommentDto> list2(Long id);
+
+	/**
+	 * @Description: 删除评论
+	 * @Author cola
+	 * @Data: 2020年3月8日
+	 * @param userId
+	 * @param id
+	 */
+	@Delete("delete from t_comment where id = #{1} and commenter = #{0} ")
+	void delete(String userId, Long id);
 }
