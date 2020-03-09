@@ -116,4 +116,13 @@ public interface NoteService {
 	 */
 	Msg<?> unshield(Long noteId);
 
+	/**
+	 * @Description: 查询评论下的回复
+	 * @Author cola
+	 * @Data: 2020年3月9日
+	 * @param commentId
+	 * @return
+	 */
+	Msg<?> reply(Long commentId);
+
 }

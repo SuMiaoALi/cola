@@ -81,9 +81,10 @@ public interface CommentMapper {
 	 * @return
 	 */
 	@Select({
-		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d') as time, " + 
-		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier " + 
-		", (select count(*) from t_comment where apply_id = a.id ) as applyCount, " +
+		"select a.id, a.content, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d %H:%i') as time, " + 
+		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier, " + 
+		"c.name, c.photo " +
+		", ifnull((select count(*) from t_comment where apply_id = a.id), 0) as applyCount, " +
 		"(select case when commenter = #{0} then 1 else 0 end) as isMine " +
 		"from t_comment a " + 
 		"left join t_profile c on c.user_id = a.commenter " + 		// 评论者
@@ -100,14 +101,40 @@ public interface CommentMapper {
 	 * @return
 	 */
 	@Select({
-		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d') as time, " + 
+		"<script>",
+		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d %H:%i') as time, " + 
 		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier " + 
+		", (select case when commenter = #{0} then 1 else 0 end) as isMine " +
 		"from t_comment a " + 
 		"left join t_profile c on c.user_id = a.commenter " + 
 		"left join t_profile cp on cp.user_id = a.apply_user " + 
-		"where a.note_id = #{0} and a.apply_id != 0 order by a.comment_time desc "
+		"where a.note_id = #{1} and a.apply_id != 0" +
+		" order by a.comment_time desc " +
+		"</script>",
 		})
-	List<NoteCommentDto> list2(Long id);
+	List<NoteCommentDto> list2(String userId, Long id);
+	
+	/**
+	 * @Description: 查询评论下的回复
+	 * @Author cola
+	 * @Data: 2020年3月9日
+	 * @param userId
+	 * @param commentId
+	 * @return
+	 */
+	@Select({
+		"<script>",
+		"select a.id, a.content, c.name, c.photo, a.commenter, ifnull(a.like_count, 0) likeCount, from_unixtime(a.comment_time, '%Y-%m-%d %H:%i') as time, " + 
+		"a.apply_id as applyId, a.apply_user as applyUser, cp.name as applier " + 
+		", (select case when commenter = #{0} then 1 else 0 end) as isMine " +
+		"from t_comment a " + 
+		"left join t_profile c on c.user_id = a.commenter " + 
+		"left join t_profile cp on cp.user_id = a.apply_user " + 
+		"where a.apply_id = #{1} "+
+		" order by a.comment_time desc " +
+		"</script>",
+		})
+	List<NoteCommentDto> list3(String userId, Long commentId);
 
 	/**
 	 * @Description: 删除评论

@@ -172,16 +172,16 @@ public class NoteServiceImpl implements NoteService {
 		PageHelper.startPage(commentVo.getStart(), commentVo.getPageSize());
 		List<NoteCommentDto> parentList = commentMapper.list1(SpringContextUtil.getUserId(), noteId);
 		// 只查询回复
-		List<NoteCommentDto> childrenList = commentMapper.list2(noteId);
+		List<NoteCommentDto> childrenList = commentMapper.list2(SpringContextUtil.getUserId(), noteId);
 		
 		for (NoteCommentDto parent : parentList) {
-			System.out.println("父id" + parent.getId());
 			List<NoteCommentDto> list = new ArrayList<>();
 			for (NoteCommentDto children : childrenList) {
 				if (children.getApplyId() == parent.getId()) {
 					// 加一条子集就退出本轮
 					children.setChildren(new ArrayList<>());
 					list.add(children);
+					if (list.size() > 1)
 					// 默认丢一条
 					break;
 				}
@@ -271,6 +271,16 @@ public class NoteServiceImpl implements NoteService {
 		// TODO Auto-generated method stub
 		noteMapper.unshield(SpringContextUtil.getUserId(), noteId);
 		return new Msg<>();
+	}
+
+	/**
+	 *查询评论下的回复
+	 */
+	@Override
+	public Msg<?> reply(Long commentId) {
+		// TODO Auto-generated method stub
+		List<NoteCommentDto> list = commentMapper.list3(SpringContextUtil.getUserId(), commentId);
+		return new Msg<>(list);
 	}
 
 }

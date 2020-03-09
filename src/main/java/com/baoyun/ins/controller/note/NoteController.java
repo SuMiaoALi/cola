@@ -138,6 +138,12 @@ public class NoteController {
 		return noteService.comment(commentVo);
 	}
 	
+	@ApiOperation("查询评论下的回复")
+	@GetMapping("/reply/{commentId}")
+	public Msg<?> reply (@PathVariable Long commentId) {
+		return noteService.reply(commentId);
+	}
+	
 	@ApiOperation("屏蔽帖子")
 	@PostMapping("/shield/{noteId}")
 	public Msg<?> shield(@PathVariable Long noteId) {
