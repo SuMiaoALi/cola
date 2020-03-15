@@ -92,6 +92,11 @@ public class NoteController {
 	@ApiOperation("保存笔记")
 	@PostMapping("/save")
 	public Msg<?> save(List<MultipartFile> file, NoteVo noteVo){
+		if (file == null || !(file.size() > 0)) {
+			Msg<Object> msg = new Msg<>();
+			msg.setCode("30002");
+			msg.setData("图片为空");
+		}
 		return noteService.save(file, noteVo);
 	}
 	
@@ -140,8 +145,8 @@ public class NoteController {
 	
 	@ApiOperation("查询评论下的回复")
 	@GetMapping("/reply/{commentId}")
-	public Msg<?> reply (@PathVariable Long commentId) {
-		return noteService.reply(commentId);
+	public Msg<?> reply (@PathVariable Long commentId, BaseVo baseVo) {
+		return noteService.reply(commentId, baseVo);
 	}
 	
 	@ApiOperation("屏蔽帖子")

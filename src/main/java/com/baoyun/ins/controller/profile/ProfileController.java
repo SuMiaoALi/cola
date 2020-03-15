@@ -46,6 +46,9 @@ public class ProfileController {
 	@ApiOperation("上传头像")
 	@PostMapping("/photo")
 	public Msg<?> photo(MultipartFile file) {
+		if (file.isEmpty()) {
+			return new Msg<>("图片为空");
+		}
 		return profileService.photo(file);
 	}
 	

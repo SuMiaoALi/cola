@@ -19,7 +19,7 @@ public class KeywordNoteDto implements Serializable {
 	private String id;
 	
 	@ApiModelProperty("帖子标题")
-	private String title;
+	private String value;
 	
 	@ApiModelProperty("类型，帖子=N，人=U")
 	private String type;

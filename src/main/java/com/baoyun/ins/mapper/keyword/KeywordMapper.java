@@ -42,10 +42,10 @@ public interface KeywordMapper {
 	 * @param keywordVo
 	 * @return
 	 */
-	@Select("(select n.id, n.title, 'N' as type from t_note n " + 
+	@Select("(select n.id, n.title value, 'N' as type from t_note n " + 
 			"where n.title like '%${vo}%' limit 5) " +
 			"union " +
-			"select p.user_id id, p.name title, 'U' as type from t_profile p " + 
+			"select p.user_id id, p.name value, 'U' as type from t_profile p " + 
 			"where p.name like '%${vo}%' limit 5 "
 			)
 	List<KeywordNoteDto> listNote(@Param("vo") String keyword);

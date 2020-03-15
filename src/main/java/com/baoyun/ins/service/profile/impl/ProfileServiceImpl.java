@@ -55,15 +55,15 @@ public class ProfileServiceImpl implements ProfileService {
 		return new Msg<>();
 	}
 
+	/**
+	 *上传头像
+	 */
 	@Override
 	public Msg<?> photo(MultipartFile file) {
 		// TODO Auto-generated method stub
-		if (file.isEmpty()) {
-			return new Msg<>();
-		}
-		String newName = FileUploadUtil.uploadImage(file);
-		profileMapper.photo(SpringContextUtil.getUserId(), newName);
-		return new Msg<>();
+		String url = FileUploadUtil.uploadImage(file);
+		profileMapper.photo(SpringContextUtil.getUserId(), url);
+		return new Msg<>(url);
 	}
 
 }

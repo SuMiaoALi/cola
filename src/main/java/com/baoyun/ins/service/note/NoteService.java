@@ -123,6 +123,6 @@ public interface NoteService {
 	 * @param commentId
 	 * @return
 	 */
-	Msg<?> reply(Long commentId);
+	Msg<?> reply(Long commentId, BaseVo baseVo);
 
 }

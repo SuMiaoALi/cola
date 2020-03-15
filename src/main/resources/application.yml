@@ -1,6 +1,6 @@
 spring:
     profiles:
-        active: dev
+        active: prod
 ---
 # 开发环境    ---：文档块
 spring:
@@ -25,7 +25,6 @@ spring:
             max-idle: 10
             min-idle: 0
         timeout: 15000
-rootPath: C:\\Users\\Ali\\Desktop\\statics
 server:
     port: 8888
 pagehelper:
@@ -81,7 +80,7 @@ spring:
             max-wait: -1
             max-idle: 10
             min-idle: 0
-        timeout: 10000
+        timeout: 15000
 server:
     port: 8888
 pagehelper:
@@ -138,7 +137,7 @@ spring:
             min-idle: 0
         timeout: 15000
 server:
-    port: 8888
+    port: 80
 pagehelper:
     helperDialect: mysql
     reasonable: true

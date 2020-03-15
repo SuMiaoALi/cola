@@ -59,6 +59,11 @@ public class SmsUtil {
 	 */
 	public Msg<?> sendSms(String phone) {
 		Msg<Object> msg = new Msg<>();
+		// 验证码已存在
+		if (redisUtil.exists(RedisConstant.SMS + phone)) {
+			msg.setMessage(redisUtil.get(RedisConstant.SMS + phone, String.class));
+			return msg;
+		}
 		// 验证码
 		String code = generateVerifyCode();
 		

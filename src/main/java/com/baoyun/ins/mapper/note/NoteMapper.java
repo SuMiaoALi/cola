@@ -84,7 +84,7 @@ public interface NoteMapper {
 		"SELECT n.id, n.title, IFNULL(n.comment_count, 0) as commentCount, IFNULL(n.like_count, 0) as likeCount, n.author, n.cover, ",
 		// 是否是自己的帖子
 		"(select case when count(1) > 0 then 1 else 0 end from t_note where id = #{id} and author = #{userId}) as isMine, IFNULL(n.collection_count, 0) as collectionCount, ",
-		"p.`name`, p.photo, p.description, DATE_FORMAT(FROM_UNIXTIME(create_time), '%Y-%m-%d   %H:%i') as time, ",
+		"p.`name`, p.photo, p.description, FROM_UNIXTIME(n.create_time, '%Y-%m-%d') as time, ",
 		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, ",
 		"(select content from t_note_content where note_id = n.id) as content, ",
 		"(select case when count(1) > 0 then 1 else 0 end from t_fans where fans_id = #{userId} and is_delete = 0 and user_id = n.author) as isFollow,",

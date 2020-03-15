@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baoyun.ins.aspect.Notify;
-import com.baoyun.ins.entity.note.dto.NoteCommentApplyDto;
 import com.baoyun.ins.entity.note.dto.NoteCommentDto;
 import com.baoyun.ins.entity.note.vo.CommentVo;
 import com.baoyun.ins.entity.note.vo.NoteCommentQueryVo;
@@ -47,11 +46,11 @@ public class CommentController {
 		return commentService.list(noteCommentQueryVo);
 	}
 	
-	@ApiOperation("查询评论")
-	@GetMapping("/applies")
-	public Msg<Page<NoteCommentApplyDto>> applies (NoteCommentQueryVo noteCommentQueryVo) {
-		return commentService.applies(noteCommentQueryVo);
-	}
+//	@ApiOperation("查询评论")
+//	@GetMapping("/applies")
+//	public Msg<Page<NoteCommentApplyDto>> applies (NoteCommentQueryVo noteCommentQueryVo) {
+//		return commentService.applies(noteCommentQueryVo);
+//	}
 	
 	@ApiOperation("保存评论")
 	@PostMapping("/save")
