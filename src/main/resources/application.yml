@@ -1,6 +1,6 @@
 spring:
     profiles:
-        active: prod
+        active: dev
 ---
 # 开发环境    ---：文档块
 spring:
