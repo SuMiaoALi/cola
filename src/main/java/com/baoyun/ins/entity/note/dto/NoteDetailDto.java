@@ -66,13 +66,7 @@ public class NoteDetailDto implements Serializable {
 	private String time;
 	
 	@ApiModelProperty("是否已点赞：>0")
-	private String isFollow;
-	
-	@ApiModelProperty("是否已点赞：>0")
 	private String isLiked;
-	
-	@ApiModelProperty("是否已转发：>0")
-	private String isShared;
 	
 	@ApiModelProperty("是否收藏：>0")
 	private String isCollected;

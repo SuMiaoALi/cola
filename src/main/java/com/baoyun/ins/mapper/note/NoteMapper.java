@@ -87,12 +87,8 @@ public interface NoteMapper {
 		"p.`name`, p.photo, p.description, FROM_UNIXTIME(n.create_time, '%Y-%m-%d') as time, ",
 		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, ",
 		"(select content from t_note_content where note_id = n.id) as content, ",
-		"(select case when count(1) > 0 then 1 else 0 end from t_fans where fans_id = #{userId} and is_delete = 0 and user_id = n.author) as isFollow,",
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{userId} and note_id = n.id) as isLiked,",
-		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_share where sharer = #{userId} and note_id = n.id) as isShared,",
-		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{userId} and note_id = n.id) as isCollected,",
-		// 是否互相关注
-		"(SELECT is_mutual FROM t_fans WHERE user_id = #{userId} and fans_id = n.author and is_delete = 0) as isAttention ",
+		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{userId} and note_id = n.id) as isCollected ",
 		"FROM t_note n, t_profile p WHERE n.author = p.user_id and n.id = #{id}",
 		"</script>"
 	})
