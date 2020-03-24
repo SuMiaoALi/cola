@@ -61,6 +61,7 @@ public interface NoteMapper {
 		"<script>",
 		"SELECT n.id, n.title, n.cover, ifnull(n.like_count, 0) likeCount, IFNULL(n.collection_count, 0) collectionCount, ",
 		"(select count(*) from t_log_note_view where note_id = n.id) as viewCount, n.author,",
+		"(select left(content, 25) from t_note_content where note_id = n.id) content, ",
 		// 当前用户是否点赞
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_like where liker = #{userId} and note_id = n.id) as isLiked,",
 		"(select case when count(1) > 0 then 1 else 0 end from t_log_note_collection where collector = #{userId} and note_id = n.id) as isCollected,",
