@@ -1,13 +1,13 @@
 spring:
     profiles:
-        active: dev
+        active: prod
 ---
 # 开发环境    ---：文档块
 spring:
     profiles: dev
     application: 
         name: ins-cola
-    aop: 
+    aop:
         auto: true
     datasource:
         url: jdbc:mysql://localhost:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&autoReconnect=true
@@ -27,6 +27,9 @@ spring:
         timeout: 15000
 server:
     port: 8888
+management:
+    security:
+        enabled: false
 pagehelper:
     helperDialect: mysql
     reasonable: true
@@ -66,12 +69,12 @@ spring:
         auto: true
     # 生产环境
     datasource:
-        url: jdbc:mysql://122.51.15.106:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=CST&autoReconnect=true
+        url: jdbc:mysql://localhost:3306/ins-cola-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=CST&autoReconnect=true
         username: root
         password: 123456
         driver-class-name: com.mysql.cj.jdbc.Driver
     redis:
-        host: 122.51.15.106
+        host: localhost
         password: 123456
         port: 6379  
         database: 1

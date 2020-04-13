@@ -96,6 +96,7 @@ public class NoteController {
 			Msg<Object> msg = new Msg<>();
 			msg.setCode("30002");
 			msg.setData("图片为空");
+			return msg;
 		}
 		return noteService.save(file, noteVo);
 	}

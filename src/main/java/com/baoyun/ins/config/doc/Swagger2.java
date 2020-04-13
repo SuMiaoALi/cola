@@ -14,6 +14,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -33,14 +34,15 @@ public class Swagger2 implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .globalOperationParameters(pars)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.baoyun.ins"))
+                .apis(RequestHandlerSelectors.basePackage("com.baoyun.ins")) // 扫描的基础包
                 .paths(PathSelectors.any())
                 .build();
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("CloudAPI接口文档")
-                .version("1.0")
+                .version("1.0.0")
+                .contact(new Contact("个人作者cola", "http://www.feedme.ltd", "cola.wz@qq.com"))
                 .build();
     }
     

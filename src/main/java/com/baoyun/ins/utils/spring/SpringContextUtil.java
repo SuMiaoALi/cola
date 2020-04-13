@@ -59,7 +59,7 @@ public class SpringContextUtil implements ApplicationContextAware {
     public static String getUserId() {
     	try {
 	    	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	    	// 1.直接从accessToken解析
+	    	// 1.直接从header中的accessToken解析
 	    	if (StringUtil.isNotNullOrEmpty(request.getHeader("accessToken"))) {
 	    		Claims claims = TokenUtil.get(request.getHeader("accessToken"));
 	    		return claims.getSubject();

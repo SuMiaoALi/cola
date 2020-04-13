@@ -62,6 +62,7 @@ public class SmsUtil {
 		// 验证码已存在
 		if (redisUtil.exists(RedisConstant.SMS + phone)) {
 			msg.setMessage(redisUtil.get(RedisConstant.SMS + phone, String.class));
+			msg.setCode("10000");
 			return msg;
 		}
 		// 验证码
@@ -89,7 +90,7 @@ public class SmsUtil {
 			JSONObject json = JSONObject.parseObject(response.getData());
 			// 发送成功
 			if ("OK".equals(json.getString("Code"))) {
-				redisUtil.set(RedisConstant.SMS + phone, code, 7200000); //code有效期30分钟
+				redisUtil.set(RedisConstant.SMS + phone, code); //code有效期30分钟
 			} else {
 				msg.setCode(GlobalReturnCode.OPERA_FAILURE);
     			msg.setMessage(json.getString("失败"));

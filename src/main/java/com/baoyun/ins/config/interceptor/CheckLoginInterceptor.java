@@ -9,7 +9,6 @@ import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.baoyun.ins.config.annotation.RequiredPermission;
 import com.baoyun.ins.config.annotation.RequiredRole;
@@ -25,6 +24,12 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+
+/**
+ * @Description: 自定义SpringMVC拦截器，代码逻辑完成后需要注册
+ * @Author cola
+ * @Date 2020年4月12日
+ */
 @Component
 public class CheckLoginInterceptor implements HandlerInterceptor {
 	
@@ -32,7 +37,8 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
 	 * 操作前先判断是否登录，未登录提示未登录
 	 * SpringContextUtil.getUserId() 可以直接从accessToken获取，也可以通过拦截器加入的请求属性current_user获取
 	 */
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+	// preHandle() => 返回true，则放行；返回false，则打回去
+     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	if (StringUtil.isNullOrEmpty(request.getHeader("accessToken"))) {
             //状态设置为未授权
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
@@ -42,9 +48,11 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         		Claims claims = TokenUtil.get(request.getHeader("accessToken"));
         		// 验证权限
                 if (this.hasPermission(claims, handler)) {
+                	// 在请求里加上userId和role
                 	request.setAttribute("current_roles", claims.get("scopes"));
                 	request.setAttribute("current_user", claims.getSubject());//用户id
                 	System.out.println("拦截了请求，user_id = " + claims.getSubject());
+                	// 放行
                     return true;
                 }
                 response.setStatus(HttpStatus.SC_UNAUTHORIZED);
@@ -59,14 +67,9 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         }
     	return false;
     }
-
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-    
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
-    }
+     
+    // 为什么不用实现postHandle和afterCompletion？
+    // 因为HandlerInterceptor接口中的方法都是default默认方法，有默认实现logic，相当于加了一个abstract class。所以我们只需要实现需要的方法即可
     
     /**
      * 权限拦截
