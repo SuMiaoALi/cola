@@ -314,10 +314,12 @@ public class LoginServiceImpl implements LoginService {
 					if (redisUtil.exists(RedisConstant.SMS + phone)) {
 						// 验证码
 						String code = redisUtil.get(RedisConstant.SMS + phone, String.class);
+						log.info("验证码为：" + code);
 						if (login.getPassword().equals(code)) {
 							// 登录成功
 							msg.setCode("10000");
 							msg.setMessage("登录成功");
+							// 正常的逻辑在登录之后应该删除验证码，保证时效性和一次性
 						} else {
 							msg.setCode(GlobalReturnCode.SMS_CODE_ERROR);
 							msg.setMessage("验证码错误");
@@ -326,7 +328,7 @@ public class LoginServiceImpl implements LoginService {
 					} else {
 						// 没收到验证码
 						msg.setCode("30002");
-						msg.setMessage("请输入正确的验证码");
+						msg.setMessage("未收到验证码，请重新发送");
 						return msg;
 					}
 				} catch (Exception e) {
