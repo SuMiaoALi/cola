@@ -76,22 +76,6 @@ pagehelper:
     supportMethodsArguments: true
     params: cont=countSql
     page-size-zero: true
-# 七牛云配置
-qiniu:
-    AK: NC-K-4dLAUWp-ohw7FdCOUULtBHdgKYJ1Koo9d1Y
-    SK: EXrmWjC_-tK2FODe1iyS25M1FhQSOn_9eGsJbAXt
-# 小程序配置
-wx:
-    qe:
-        appid: wx5b484b45745a47d3
-        appsecret: 699c9d167705475a59c2ec338467e03e
-        modelId: 9_BkwwFE-R8D0ymqVFRXezkXb5EFO4pitu3ZqJC7r-0
-# 阿里云配置
-ali:
-    accessKeyId: LTAI4FqU3i4Zy2Uu4AraQb8a
-    accessKeySecret: IDFwQsOiVL12Jexh7nEFGH1xlipJwT
-    templateCode: SMS_183240580
-    signName: CloudAPI社区
 # 日志级别
 logging:
     level:
